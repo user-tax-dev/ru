@@ -1,0 +1,18 @@
+{
+  "name": "@user.tax/redis",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "rust for user.tax",
+  "main": "lib/lib.js",
+  "scripts": {
+    "build": "cargo-cp-artifact -nc lib/lib.node -- cargo build --features main --release --message-format=json-render-diagnostics",
+    "install": "npm run build",
+    "test": "cargo test"
+  },
+  "license": "(SSPL-1.0 OR COMMERCIAL)",
+  "dependencies": {
+    "@u6x/node_cls": "^0.0.1",
+    "cargo-cp-artifact": "^0.1.6"
+  },
+  "homepage": "https://github.com/user-tax-dev/rlib"
+}

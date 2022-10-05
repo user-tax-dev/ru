@@ -1,0 +1,6 @@
+[submodule "lib/fred.rs"]
+	path = lib/fred.rs
+	url = git@github.com:user-tax-dev/fred.rs.git
+[submodule "lib/neon"]
+	path = lib/neon
+	url = git@github.com:user-tax-dev/neon.git

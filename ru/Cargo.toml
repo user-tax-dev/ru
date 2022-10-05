@@ -1,0 +1,22 @@
+[package]
+name = "ru"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+misc = {path="../misc"}
+svg2webp = {path="../svg2webp"}
+redis = {path="../redis"}
+
+[features]
+main = []
+
+[dependencies.neon]
+path="../lib/neon/crates/neon"
+default-features=false
+features=["napi-latest","proc-macros","napi-runtime","napi-runtime","futures"]

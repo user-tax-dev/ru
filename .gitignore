@@ -1,0 +1,7 @@
+.env
+bun.lockb
+lib.node
+node_modules/
+nohup.out
+pnpm-lock.yaml
+target/

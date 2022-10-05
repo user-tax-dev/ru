@@ -1,0 +1,19 @@
+[workspace]
+exclude = ['lib']
+members = [
+  "nlib",
+  "ru",
+  "redis",
+  "svg2webp",
+  "misc"
+]
+
+[profile.release]
+lto = true
+opt-level = 3
+incremental = true
+codegen-units = 1
+#debug-assertions = false
+#overflow-checks = false
+#panic = 'abort'
+#strip = true
