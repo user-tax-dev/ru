@@ -1,7 +1,7 @@
 mod init;
 use std::{
-  hash::{BuildHasher, Hasher},
-  net::IpAddr,
+    hash::{BuildHasher, Hasher},
+    net::IpAddr,
 };
 
 pub use init::init;
@@ -79,7 +79,7 @@ xxh3_b36 |cx| {
    }
    n+=1;
  }
- let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",&r[n..]);
+ let r = base_x::encode("123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",&r[n..]);
  js_str(cx,r)
 }
 
