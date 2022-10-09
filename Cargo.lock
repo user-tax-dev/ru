@@ -797,6 +797,7 @@ dependencies = [
  "blake3",
  "neon",
  "nlib",
+ "ordered-varint",
  "rand",
  "xxhash-rust",
  "z85",
@@ -963,6 +964,12 @@ dependencies = [
  "pkg-config",
  "vcpkg",
 ]
+
+[[package]]
+name = "ordered-varint"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "66282efaf214671fdff89a58ec666f465af966fa0f795c02e98d009296623b9a"
 
 [[package]]
 name = "parking_lot"
