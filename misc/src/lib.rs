@@ -72,7 +72,14 @@ xxh3_b36 |cx| {
    h64.update(i.as_ref());
  }
  let r = h64.finish().to_le_bytes();
- let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",&r);
+ let mut n = 0;
+ while n < 6 {
+   if r[n]!=0 {
+     break;
+   }
+   n+=1;
+ }
+ let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",&r[n..]);
  js_str(cx,r)
 }
 
