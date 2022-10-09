@@ -5,7 +5,7 @@
 {
   u64Bin
   binU64
-  xxh3
+  xxh3B36
   passwordHash
 } = lib
 
@@ -32,7 +32,7 @@ cost = (p)=>
   r
 
 do =>
-  console.log xxh3 '1234'
+  console.log xxh3B36 '1234'
   return
   await cost main()
   await cost passwordHash new Uint8Array([97])

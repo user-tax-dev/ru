@@ -7,7 +7,7 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("z85Load", crate::z85_load)?;
   cx.export_function("z85Dump", crate::z85_dump)?;
   cx.export_function("randomBytes", crate::random_bytes)?;
-  cx.export_function("xxh3", crate::xxh3)?;
+  cx.export_function("xxh3B36", crate::xxh3_b36)?;
   cx.export_function("ipBin", crate::ip_bin)?;
   Ok(())
 }

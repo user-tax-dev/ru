@@ -71,7 +71,7 @@ xxh3_b36 |cx| {
  for i in li {
    h64.update(i.as_ref());
  }
- let r = h64.finish().to_le_bytes();
+ let r = &h64.finish().to_le_bytes();
  let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",r);
  js_str(cx,r)
 }
