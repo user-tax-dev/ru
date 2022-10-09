@@ -65,13 +65,15 @@ random_bytes |cx| {
   ).collect::<Vec<u8>>())
 }
 
-xxh3 |cx| {
+xxh3_b36 |cx| {
  let li = args_bin_li(cx,0)?;
  let mut h64 = XXHASHER.build_hasher();
  for i in li {
    h64.update(i.as_ref());
  }
- js_f64(cx,h64.finish() as f64)
+ let r = h64.finish().to_le_bytes();
+ let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",r);
+ js_str(cx,r)
 }
 
 ip_bin |cx| {
