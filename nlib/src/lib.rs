@@ -1,7 +1,7 @@
 #![feature(macro_metavar_expr)]
 
 pub use neon::prelude::*;
-use neon::{handle::Managed, result::Throw, types::buffer::TypedArray};
+use neon::{result::Throw, types::buffer::TypedArray};
 use num_traits::AsPrimitive;
 use once_cell::sync::OnceCell;
 pub use paste::paste;
