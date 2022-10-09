@@ -6,7 +6,6 @@ use std::{
 
 pub use init::init;
 use nlib::*;
-use ordered_varint::Variable;
 use xxhash_rust::xxh3::Xxh3Builder;
 
 const XXHASHER: Xxh3Builder = Xxh3Builder::new();
@@ -29,20 +28,20 @@ password_hash |cx| {
   })
 }
 
-u64_bin |cx| {
-  let x = as_f64(cx, 0)? as u64;
-  js_bin(cx, &x.to_le_bytes())
-}
-
-bin_u64 |cx| {
-  let x = as_bin(cx, 0)?;
-  if x.len() == 8 {
-    let x = u64::from_le_bytes(x.try_into().unwrap()) as f64;
-    js_f64(cx, x)
-  } else {
-    js_undefined(cx)
-  }
-}
+// u64_bin |cx| {
+//   let x = as_f64(cx, 0)? as u64;
+//   js_bin(cx, &x.to_le_bytes())
+// }
+//
+// bin_u64 |cx| {
+//   let x = as_bin(cx, 0)?;
+//   if x.len() == 8 {
+//     let x = u64::from_le_bytes(x.try_into().unwrap()) as f64;
+//     js_f64(cx, x)
+//   } else {
+//     js_undefined(cx)
+//   }
+// }
 
 z85_load |cx| {
   let s = to_bin(cx,0)?;
@@ -72,8 +71,8 @@ xxh3_b36 |cx| {
  for i in li {
    h64.update(i.as_ref());
  }
- let r = h64.finish().to_variable_vec()?;
- let r = base_x::encode("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",&r);
+ let r = h64.finish().to_le_bytes();
+ let r = base_x::encode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",&r);
  js_str(cx,r)
 }
 
