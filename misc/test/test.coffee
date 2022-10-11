@@ -38,6 +38,9 @@ do =>
   console.log tld 'worri.3.1.github.com.cn'
   console.log tld 'worri.3.1.github.com'
   console.log tld 'worri.3.1.123.io'
+  console.log tld 'worri.3.1.123.中国'
+  console.log tld 'worri.3.1.123.中国.pro.typeform.com
+'
   console.log xxh3B36 '1234'
   return
   await cost main()
