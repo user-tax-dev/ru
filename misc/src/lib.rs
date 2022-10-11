@@ -1,7 +1,7 @@
 mod init;
 use std::{
-    hash::{BuildHasher, Hasher},
-    net::IpAddr,
+  hash::{BuildHasher, Hasher},
+  net::IpAddr,
 };
 
 pub use init::init;
@@ -101,6 +101,28 @@ ip_bin |cx| {
     }
     Err(_) => js_undefined(cx)
   }
+}
+
+tld |cx| {
+  let mut domain = &to_bin(cx, 0)?[..];
+  if let Some(d) = psl::domain(&domain){
+    let len = d.suffix().as_bytes().len();
+    if len > 0 {
+      let mut n = domain.len()-len;
+      if n > 0 {
+        n-=1;
+      }
+      while n > 0 {
+        let t=n-1;
+        if domain[t] == b'.' {
+          break;
+        }
+        n=t;
+      }
+      domain = &domain[n..]
+    }
+  }
+  return js_str(cx, String::from_utf8_lossy(domain))
 }
 
 }

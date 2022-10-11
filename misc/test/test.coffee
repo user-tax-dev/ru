@@ -7,6 +7,7 @@
   binU64
   xxh3B36
   passwordHash
+  tld
 } = lib
 
 sleep = =>
@@ -32,6 +33,11 @@ cost = (p)=>
   r
 
 do =>
+  console.log tld 'github.io'
+  console.log tld 'worri.3.1.github.io'
+  console.log tld 'worri.3.1.github.com.cn'
+  console.log tld 'worri.3.1.github.com'
+  console.log tld 'worri.3.1.123.io'
   console.log xxh3B36 '1234'
   return
   await cost main()
