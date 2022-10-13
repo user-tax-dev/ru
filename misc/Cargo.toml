@@ -17,6 +17,7 @@ z85 = "3.0.5"
 base-x = "0.2.11"
 ordered-varint = "1.0.1"
 psl = "2.1.2"
+base64-simd = "0.7.0"
 
 [dependencies.neon]
 path="../lib/neon/crates/neon"

@@ -1,6 +1,8 @@
 use neon::prelude::*;
 
 pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
+  cx.export_function("b64", crate::b64)?;
+  cx.export_function("unb64", crate::unb64)?;
   cx.export_function("passwordHash", crate::password_hash)?;
   cx.export_function("z85Load", crate::z85_load)?;
   cx.export_function("z85Dump", crate::z85_dump)?;

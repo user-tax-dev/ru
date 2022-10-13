@@ -1,11 +1,21 @@
 #![feature(macro_metavar_expr)]
 
 pub use neon::prelude::*;
-use neon::{result::Throw, types::buffer::TypedArray};
+use neon::{handle::Managed, result::Throw, types::buffer::TypedArray};
 use num_traits::AsPrimitive;
 use once_cell::sync::OnceCell;
 pub use paste::paste;
 use tokio::runtime::Runtime;
+
+#[macro_export]
+macro_rules! ok {
+  ($cx:ident,$body:expr) => {
+    match $body {
+      Ok(r) => r,
+      Err(err) => return $cx.throw_error(err.to_string()),
+    }
+  };
+}
 
 #[macro_export]
 macro_rules! js_fn {
