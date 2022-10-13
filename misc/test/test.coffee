@@ -10,6 +10,7 @@
   xxh3B36
   passwordHash
   tld
+  randomBytes
 } = lib
 
 sleep = =>
@@ -35,6 +36,8 @@ cost = (p)=>
   r
 
 do =>
+  console.log randomBytes(8)
+  return
   console.log tld 'github.io'
   console.log tld 'worri.3.1.github.io'
   console.log tld 'worri.3.1.github.com.cn'
