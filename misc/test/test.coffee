@@ -5,6 +5,8 @@
 {
   u64Bin
   binU64
+  b64
+  unb64
   xxh3B36
   passwordHash
   tld
@@ -42,6 +44,10 @@ do =>
   console.log tld 'worri.3.1.123.中国.pro.typeform.com
 '
   console.log xxh3B36 '1234'
+  hash = await passwordHash new Uint8Array([97])
+  console.log hash
+  console.log b64 hash
+  console.log unb64 b64 hash
   return
   await cost main()
   await cost passwordHash new Uint8Array([97])
