@@ -8,9 +8,12 @@
   b64
   unb64
   xxh3B36
+  xxh3
   passwordHash
   tld
   randomBytes
+  cookieDecode
+  cookieEncode
 } = lib
 
 sleep = =>
@@ -36,7 +39,12 @@ cost = (p)=>
   r
 
 do =>
-  console.log randomBytes(8)
+  sk = '123'
+  c = randomBytes(8)
+  console.log c, xxh3(sk, c)
+  console.log cookieEncode c, xxh3(sk, c)
+  console.log cookieDecode cookieEncode c, xxh3(sk, c)
+
   return
   console.log tld 'github.io'
   console.log tld 'worri.3.1.github.io'

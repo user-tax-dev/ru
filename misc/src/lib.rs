@@ -12,6 +12,9 @@ use xxhash_rust::xxh3::Xxh3Builder;
 const XXHASHER: Xxh3Builder = Xxh3Builder::new();
 const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 
+const COOKIE_SAFE_CHAR: &'static str =
+  "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
+
 js_fn! {
 
   b64 |cx| {
@@ -79,6 +82,28 @@ js_fn! {
     js_bin(cx,(0..n).map(
         |_| rand::random::<u8>()
     ).collect::<Vec<u8>>())
+  }
+
+  cookie_encode |cx| {
+    let li = args_bin_li(cx,0)?;
+    let li = li.concat();
+    js_str(cx,base_x::encode(COOKIE_SAFE_CHAR,&li))
+  }
+
+  cookie_decode |cx| {
+    let bin = to_str(cx, 0)?;
+    let r = ok!(cx, base_x::decode(COOKIE_SAFE_CHAR,&bin));
+    js_bin(cx,r)
+  }
+
+  xxh3 |cx| {
+    let li = args_bin_li(cx,0)?;
+    let mut h64 = XXHASHER.build_hasher();
+    for i in li {
+      h64.update(i.as_ref());
+    }
+    let r = h64.finish().to_le_bytes();
+    js_bin(cx,r)
   }
 
   xxh3_b36 |cx| {

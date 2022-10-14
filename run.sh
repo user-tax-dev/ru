@@ -6,7 +6,11 @@ set -ex
 
 cd $1
 rm -rf lib
+build(){
 bun run cargo-cp-artifact -- -nc lib/lib.node -- cargo build --features main --message-format=json-render-diagnostics
+}
+
+build || ./sh/gen.init.coffee $1 && build
 bun run cep -- -c test -o lib
 cd $DIR
 ./sh/gen.init.coffee $1
