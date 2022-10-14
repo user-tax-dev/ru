@@ -9,7 +9,8 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("randomBytes", crate::random_bytes)?;
   cx.export_function("cookieEncode", crate::cookie_encode)?;
   cx.export_function("cookieDecode", crate::cookie_decode)?;
-  cx.export_function("xxh3", crate::xxh3)?;
+  cx.export_function("xxh64", crate::xxh64)?;
+  cx.export_function("xxh32", crate::xxh32)?;
   cx.export_function("xxh3B36", crate::xxh3_b36)?;
   cx.export_function("ipBin", crate::ip_bin)?;
   cx.export_function("tld", crate::tld)?;

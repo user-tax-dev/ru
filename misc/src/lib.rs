@@ -7,8 +7,9 @@ use std::{
 use base64_simd::Base64;
 pub use init::init;
 use nlib::*;
-use xxhash_rust::xxh3::Xxh3Builder;
+use xxhash_rust::{xxh3::Xxh3Builder, xxh32::Xxh32};
 
+const XXH32: Xxh32 = Xxh32::new();
 const XXHASHER: Xxh3Builder = Xxh3Builder::new();
 const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 
@@ -96,13 +97,23 @@ js_fn! {
     js_bin(cx,r)
   }
 
-  xxh3 |cx| {
+  xxh64 |cx| {
     let li = args_bin_li(cx,0)?;
     let mut h64 = XXHASHER.build_hasher();
     for i in li {
       h64.update(i.as_ref());
     }
     let r = h64.finish().to_le_bytes();
+    js_bin(cx,r)
+  }
+
+  xxh32 |cx| {
+    let li = args_bin_li(cx,0)?;
+    let mut h = XXH32.build_hasher();
+    for i in li {
+      h.update(i.as_ref());
+    }
+    let r = h.finish().to_le_bytes();
     js_bin(cx,r)
   }
 
