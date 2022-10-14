@@ -130,7 +130,7 @@ js_fn! {
       }
       n+=1;
     }
-    let r = base_x::encode("123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",&r[n..]);
+    let r = base_x::encode("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",&r[n..]);
     js_str(cx,r)
   }
 
