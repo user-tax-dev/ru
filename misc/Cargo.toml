@@ -18,6 +18,7 @@ base-x = "0.2.11"
 ordered-varint = "1.0.1"
 psl = "2.1.2"
 base64-simd = "0.7.0"
+stream-vbyte64 = "0.1.2"
 
 [dependencies.neon]
 path="../lib/neon/crates/neon"

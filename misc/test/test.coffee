@@ -14,6 +14,8 @@
   randomBytes
   cookieDecode
   cookieEncode
+  zipU64
+  unzipU64
 } = lib
 
 sleep = =>
@@ -39,6 +41,11 @@ cost = (p)=>
   r
 
 do =>
+  bin = zipU64(1,2,3,Number.MAX_SAFE_INTEGER)
+  console.log bin
+  console.log unzipU64 4,bin
+
+  return
   sk = '123'
   c = randomBytes(8)
   console.log c, xxh32(sk, c)

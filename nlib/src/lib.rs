@@ -257,3 +257,16 @@ pub fn await_void<'a, C: Context<'a>>(
 ) -> JsResult<'a, JsValue> {
   r#await(cx, f, |mut cx, _| js_undefined(&mut cx))
 }
+
+pub fn js_li<'a, C: Context<'a>, I: Iterator<Item = JsResult<'a, JsValue>> + ExactSizeIterator>(
+  cx: &mut C,
+  iter: I,
+) -> JsResult<'a, JsValue> {
+  let li = JsArray::new(cx, iter.len() as u32);
+
+  for (i, v) in iter.enumerate() {
+    li.set(cx, i as u32, v?)?;
+  }
+
+  Ok(li.as_value(cx))
+}

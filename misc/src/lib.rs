@@ -16,6 +16,26 @@ const COOKIE_SAFE_CHAR: &'static str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
 js_fn! {
+  zip_u64 |cx| {
+    let mut li = vec![];
+    let len = cx.len();
+    for i in 0..len {
+      li.push( as_f64(cx, i)? as u64 );
+    }
+    let data_len = stream_vbyte64::max_compressed_len(len);
+    let mut buf = vec![0; data_len];
+    let len = stream_vbyte64::encode(&li, &mut buf);
+    js_bin(cx,&buf[..len])
+  }
+
+  unzip_u64 |cx| {
+    let len = as_f64(cx, 0)? as usize;
+    let bin = as_bin(cx, 1)?;
+    let mut decoded = vec![0; len];
+    stream_vbyte64::decode(&mut decoded, &bin);
+    let li = decoded.into_iter().map(|i| js_f64(cx,i as f64)).collect::<Vec<_>>();
+    js_li(cx,li.into_iter())
+  }
 
   b64 |cx| {
     let mut li = vec![];
