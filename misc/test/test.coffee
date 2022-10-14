@@ -44,7 +44,6 @@ do =>
   console.log c, xxh3(sk, c)
   console.log cookieEncode c, xxh3(sk, c)
   console.log cookieDecode cookieEncode c, xxh3(sk, c)
-
   return
   console.log tld 'github.io'
   console.log tld 'worri.3.1.github.io'
