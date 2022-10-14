@@ -42,8 +42,10 @@ do =>
   sk = '123'
   c = randomBytes(8)
   console.log c, xxh32(sk, c)
-  console.log cookieEncode c, xxh32(sk, c)
-  console.log cookieDecode cookieEncode c, xxh32(sk, c)
+  day = (parseInt new Date()/864e5)%256
+  console.log {day}
+  console.log cookieEncode Uint8Array.from([day]), c, xxh32(Uint8Array.from([day]), sk, c)
+  console.log cookieDecode cookieEncode Uint8Array.from([day]), c, xxh32(Uint8Array.from([day]), sk, c)
   return
   console.log tld 'github.io'
   console.log tld 'worri.3.1.github.io'
