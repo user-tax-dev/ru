@@ -8,7 +8,7 @@
   b64
   unb64
   xxh3B36
-  xxh3
+  xxh32
   passwordHash
   tld
   randomBytes
@@ -41,9 +41,9 @@ cost = (p)=>
 do =>
   sk = '123'
   c = randomBytes(8)
-  console.log c, xxh3(sk, c)
-  console.log cookieEncode c, xxh3(sk, c)
-  console.log cookieDecode cookieEncode c, xxh3(sk, c)
+  console.log c, xxh32(sk, c)
+  console.log cookieEncode c, xxh32(sk, c)
+  console.log cookieDecode cookieEncode c, xxh32(sk, c)
   return
   console.log tld 'github.io'
   console.log tld 'worri.3.1.github.io'
