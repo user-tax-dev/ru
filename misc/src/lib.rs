@@ -57,9 +57,10 @@ js_fn! {
       let bin = to_bin(cx, i)?;
       hasher.update(&bin);
     }
+    const N: usize = 512;
     await_bin(cx, async move {
-      let mut output = [0; 512];
-      for _ in 1..512 {
+      let mut output = [0; N];
+      for _ in 1..N {
         hasher.finalize_xof().fill(&mut output);
         hasher.update(&output);
       }
