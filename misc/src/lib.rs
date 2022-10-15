@@ -58,8 +58,8 @@ js_fn! {
       hasher.update(&bin);
     }
     await_bin(cx, async move {
-      let mut output = [0; 2048];
-      for _ in 1..2048 {
+      let mut output = [0; 1024];
+      for _ in 1..1024 {
         hasher.finalize_xof().fill(&mut output);
         hasher.update(&output);
       }
