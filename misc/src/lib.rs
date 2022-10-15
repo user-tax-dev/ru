@@ -58,12 +58,14 @@ js_fn! {
       hasher.update(&bin);
     }
     await_bin(cx, async move {
-      let mut output = [0; 1024];
-      for _ in 1..1024 {
+      let mut output = [0; 512];
+      for _ in 1..512 {
         hasher.finalize_xof().fill(&mut output);
         hasher.update(&output);
       }
-      Ok(Box::from(&hasher.finalize().as_bytes()[..]))
+      let mut output = [0; 16];
+      hasher.finalize_xof().fill(&mut output);
+      Ok(Box::from(&output[..]))
     })
   }
 
