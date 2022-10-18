@@ -282,4 +282,11 @@ js_fn! {
   redis_fnum_r |cx| { fcall_ro!(cx,option_f64,Option<f64>) }
   redis_fstr |cx| { fcall!(cx,option_str,Option<String>) }
   redis_fstr_r |cx| { fcall_ro!(cx,option_str,Option<String>) }
+
+  redis_quit |cx| {
+    this!(cx this void {
+      this.quit()
+    })
+  }
+
 }
