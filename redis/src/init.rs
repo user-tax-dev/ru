@@ -3,8 +3,8 @@ use neon::prelude::*;
 pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("serverHostPort", crate::server_host_port)?;
   cx.export_function("serverCluster", crate::server_cluster)?;
-  cx.export_function("redisQuit", crate::redis_quit)?;
   cx.export_function("redisNew", crate::redis_new)?;
+  cx.export_function("redisQuit", crate::redis_quit)?;
   cx.export_function("redisGet", crate::redis_get)?;
   cx.export_function("redisGetB", crate::redis_get_b)?;
   cx.export_function("redisSet", crate::redis_set)?;

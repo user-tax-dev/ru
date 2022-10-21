@@ -82,12 +82,6 @@ js_fn! {
     js_box(cx,conf)
   }
 
-  redis_quit |cx| {
-    this!(cx this void {
-      this.quit()
-    })
-  }
-
   redis_new |cx| {
     let mut config = RedisConfig::default();
     config.version = fred::types::RespVersion::RESP3;
@@ -109,6 +103,12 @@ js_fn! {
       },
       |mut cx, client| Ok(cx.boxed(Redis(client)).as_value(&mut cx)),
     )
+  }
+
+  redis_quit |cx| {
+    this!(cx this void {
+      this.quit_pool()
+    })
   }
 
   redis_get |cx| {
