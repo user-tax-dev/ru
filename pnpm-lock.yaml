@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@iuser/camel': ^0.0.20
-  '@iuser/node-loader': ^0.0.30
+  '@iuser/node-loader': ^0.0.32
   '@iuser/read': ^0.0.5
   '@rmw/thisdir': ^0.0.2
   '@u6x/jsext': ^0.0.4
@@ -12,7 +12,7 @@ specifiers:
 
 devDependencies:
   '@iuser/camel': 0.0.20
-  '@iuser/node-loader': 0.0.30
+  '@iuser/node-loader': 0.0.32
   '@iuser/read': 0.0.5
   '@rmw/thisdir': 0.0.2
   '@u6x/jsext': 0.0.4
@@ -26,8 +26,8 @@ packages:
     resolution: {integrity: sha512-cEYRxe+NaHY/z2F4JbMd98J/+Oj6IlzHDCM1bG6vQLozKeuOLT4Hq5g6M7TOtVNP+VURBkXfFMoZIW7Iunamcg==}
     dev: true
 
-  /@iuser/node-loader/0.0.30:
-    resolution: {integrity: sha512-/n+b3araJurjNdQNV/VtiTIVUAHA1+cxcpV8V5BB25y/cwFIJPRn2+XIjr3/oF+IybVyKc9UZCiuRukEPaCb2w==}
+  /@iuser/node-loader/0.0.32:
+    resolution: {integrity: sha512-4wiD0rDsOfeGyRWuRGadYNp1yMe5kjPb315MBQH+chH47JwG/p9hz/l3mA1q5RpqhBNsmgtDi5wvNnG+cMGfCQ==}
     dependencies:
       coffee_plus: 0.0.42
       coffeescript: 2.7.0

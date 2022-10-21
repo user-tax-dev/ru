@@ -2,7 +2,7 @@
   "type": "module",
   "devDependencies": {
     "@iuser/camel": "^0.0.20",
-    "@iuser/node-loader": "^0.0.30",
+    "@iuser/node-loader": "^0.0.32",
     "@iuser/read": "^0.0.5",
     "@rmw/thisdir": "^0.0.2",
     "@u6x/jsext": "^0.0.4",

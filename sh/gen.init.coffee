@@ -16,8 +16,8 @@ if DIR == 'ru'
     try
       {default:ru} = await import('../ru/lib/lib.js')
     catch err
+      console.log err
       return
-
     keys = [...Object.keys(ru)]
     console.log join(resolve(DIR),'lib/index.js')
     write(
