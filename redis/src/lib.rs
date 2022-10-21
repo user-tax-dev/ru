@@ -1,11 +1,11 @@
 mod init;
 use fred::{
-  interfaces::{
-    FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
-  },
-  pool::RedisPool,
-  prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::Expiration,
+    interfaces::{
+        FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
+    },
+    pool::RedisPool,
+    prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
+    types::{Expiration, RedisMap},
 };
 pub use init::init;
 use nlib::*;
@@ -14,12 +14,12 @@ alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 
 macro_rules! this {
-  ($cx:ident $this:ident $await:ident $body:block) => {{
-    let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
-    paste! {
-      [<await_ $await>]!($cx,$body)
-    }
-  }};
+    ($cx:ident $this:ident $await:ident $body:block) => {{
+        let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
+        paste! {
+          [<await_ $await>]!($cx,$body)
+        }
+    }};
 }
 
 macro_rules! fcall_ro{
@@ -195,13 +195,16 @@ js_fn! {
 
   redis_hset |cx| {
     this!(cx this void {
-      let key = to_bin(cx, 1)?;
+      let val: RedisMap;
 
+      dbg!(cx.len());
       if cx.len() == 3 {
-        this.hset::<(),_,_>(key, (to_bin(cx, 2)?, to_bin(cx, 3)?))
+        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
       } else {
-        this.hset::<(),_,_>(key, to_kvli(cx, 2, jsval2bin)?)
+        val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
       }
+
+      this.hset::<(),_,_>(to_bin(cx, 1)?, val)
 
     })
   }
