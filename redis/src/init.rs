@@ -3,6 +3,7 @@ use neon::prelude::*;
 pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("serverHostPort", crate::server_host_port)?;
   cx.export_function("serverCluster", crate::server_cluster)?;
+  cx.export_function("redisQuit", crate::redis_quit)?;
   cx.export_function("redisNew", crate::redis_new)?;
   cx.export_function("redisGet", crate::redis_get)?;
   cx.export_function("redisGetB", crate::redis_get_b)?;
@@ -34,7 +35,6 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("redisFnumR", crate::redis_fnum_r)?;
   cx.export_function("redisFstr", crate::redis_fstr)?;
   cx.export_function("redisFstrR", crate::redis_fstr_r)?;
-  cx.export_function("redisQuit", crate::redis_quit)?;
   Ok(())
 }
 

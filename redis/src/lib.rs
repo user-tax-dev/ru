@@ -4,14 +4,15 @@ use fred::{
     ClientLike, FunctionInterface, HashesInterface, KeysInterface, SetsInterface,
     SortedSetsInterface,
   },
-  prelude::{AsyncResult, ReconnectPolicy, RedisClient, RedisConfig, ServerConfig as Config},
+  pool::RedisPool,
+  prelude::{AsyncResult, ReconnectPolicy, RedisConfig, ServerConfig as Config},
   types::{Expiration, FromRedis},
 };
 pub use init::init;
 use nlib::*;
 
 alias!(ServerConfig, Config);
-alias!(Redis, RedisClient);
+alias!(Redis, RedisPool);
 
 macro_rules! this {
   ($cx:ident $this:ident $await:ident $body:block) => {{
@@ -81,6 +82,12 @@ js_fn! {
     js_box(cx,conf)
   }
 
+  redis_quit |cx| {
+    this!(cx this void {
+      this.quit()
+    })
+  }
+
   redis_new |cx| {
     let mut config = RedisConfig::default();
     config.version = fred::types::RespVersion::RESP3;
@@ -94,7 +101,8 @@ js_fn! {
     r#await(
       cx,
       async move {
-        let client = RedisClient::new(config);
+        //let client = RedisClient::new(config);
+        let client = RedisPool::new(config, 3)?;
         client.connect(Some(policy));
         client.wait_for_connect().await?;
         Ok(client)
@@ -291,11 +299,5 @@ js_fn! {
   redis_fnum_r |cx| { fcall_ro!(cx,option_f64,Option<f64>) }
   redis_fstr |cx| { fcall!(cx,option_str,Option<String>) }
   redis_fstr_r |cx| { fcall_ro!(cx,option_str,Option<String>) }
-
-  redis_quit |cx| {
-    this!(cx this void {
-      this.quit()
-    })
-  }
 
 }
