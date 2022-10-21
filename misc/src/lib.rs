@@ -7,6 +7,7 @@ use std::{
 use base64_simd::Base64;
 pub use init::init;
 use nlib::*;
+use ordered_varint::Variable;
 use xxhash_rust::{xxh3::Xxh3Builder, xxh32::Xxh32};
 
 const XXHASHER: Xxh3Builder = Xxh3Builder::new();
@@ -70,20 +71,16 @@ js_fn! {
     })
   }
 
-  // u64_bin |cx| {
-  //   let x = as_f64(cx, 0)? as u64;
-  //   js_bin(cx, &x.to_le_bytes())
-  // }
-  //
-  // bin_u64 |cx| {
-  //   let x = as_bin(cx, 0)?;
-  //   if x.len() == 8 {
-  //     let x = u64::from_le_bytes(x.try_into().unwrap()) as f64;
-  //     js_f64(cx, x)
-  //   } else {
-  //     js_undefined(cx)
-  //   }
-  // }
+  u64_bin |cx| {
+    let x = as_f64(cx, 0)? as u64;
+    js_bin(cx, &ok!(cx,x.to_variable_vec()))
+  }
+
+  bin_u64 |cx| {
+    let x = as_bin(cx, 0)?;
+    let x = ok!(cx,u64::decode_variable(x)) as f64;
+    js_f64(cx, x)
+  }
 
   z85_load |cx| {
     let s = to_bin(cx,0)?;
