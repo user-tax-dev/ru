@@ -41,9 +41,11 @@ cost = (p)=>
   r
 
 do =>
-  bin = zipU64(1,2,3,Number.MAX_SAFE_INTEGER)
-  console.log bin
+  li = [1,2,3,Number.MAX_SAFE_INTEGER]
+  console.log li
+  bin = zipU64(...li)
   console.log unzipU64 4,bin
+  console.log bin
 
   return
   sk = '123'
