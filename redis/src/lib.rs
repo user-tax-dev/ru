@@ -195,19 +195,14 @@ js_fn! {
 
   redis_hset |cx| {
     this!(cx this void {
-      this.hset::<(),_,_>(
-        to_bin(cx, 1)?,
-        (to_bin(cx, 2)?, to_bin(cx, 3)?),
-      )
-    })
-  }
+      let key = to_bin(cx, 1)?;
 
-  redis_hput |cx| {
-    this!(cx this void {
-      this.hset::<(),_,_>(
-        to_bin(cx, 1)?,
-        to_kvli(cx, 2, jsval2bin)?,
-      )
+      if cx.len() == 3 {
+        this.hset::<(),_,_>(key, (to_bin(cx, 2)?, to_bin(cx, 3)?))
+      } else {
+        this.hset::<(),_,_>(key, to_kvli(cx, 2, jsval2bin)?)
+      }
+
     })
   }
 
