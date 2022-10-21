@@ -2,34 +2,35 @@ lockfileVersion: 5.4
 
 specifiers:
   '@iuser/camel': ^0.0.20
-  '@iuser/node-loader': ^0.0.25
+  '@iuser/node-loader': ^0.0.30
   '@iuser/read': ^0.0.5
   '@rmw/thisdir': ^0.0.2
-  coffee_plus: ^0.0.39
+  '@u6x/jsext': ^0.0.4
+  coffee_plus: ^0.0.42
   concurrently: ^7.4.0
+  utax: ^0.0.9
 
 devDependencies:
   '@iuser/camel': 0.0.20
-  '@iuser/node-loader': 0.0.25
+  '@iuser/node-loader': 0.0.30
   '@iuser/read': 0.0.5
   '@rmw/thisdir': 0.0.2
-  coffee_plus: 0.0.39
+  '@u6x/jsext': 0.0.4
+  coffee_plus: 0.0.42
   concurrently: 7.4.0
+  utax: 0.0.9
 
 packages:
-
-  /@iuser/camel/0.0.17:
-    resolution: {integrity: sha512-jtO5S9eY8FXvrwXwA5LCd4VV5sCH16MLkatZQFvdov7MYY6ylk3EbgWcxwXajRFO/m77JLTOU1nHwtpzoxrGjg==}
-    dev: true
 
   /@iuser/camel/0.0.20:
     resolution: {integrity: sha512-cEYRxe+NaHY/z2F4JbMd98J/+Oj6IlzHDCM1bG6vQLozKeuOLT4Hq5g6M7TOtVNP+VURBkXfFMoZIW7Iunamcg==}
     dev: true
 
-  /@iuser/node-loader/0.0.25:
-    resolution: {integrity: sha512-ZPZmbkrvTVvdIid1ePbAqd8E+3AgkIFewsKbmitc/5dGRmRWzMQadY24YY7JsLL0o2YiBKmjbZxhDIXdeAILRA==}
+  /@iuser/node-loader/0.0.30:
+    resolution: {integrity: sha512-/n+b3araJurjNdQNV/VtiTIVUAHA1+cxcpV8V5BB25y/cwFIJPRn2+XIjr3/oF+IybVyKc9UZCiuRukEPaCb2w==}
     dependencies:
-      coffee_plus: 0.0.39
+      coffee_plus: 0.0.42
+      coffeescript: 2.7.0
     dev: true
 
   /@iuser/read/0.0.5:
@@ -40,12 +41,16 @@ packages:
     resolution: {integrity: sha512-fhxi4clPU6ZcbUjyc763yk405Nsf5jU1qXQwBN4AxCrzbS0paHLEr3UJUXOm85ycxHHw2ja1o/k+/Xpmz9N4hw==}
     dev: true
 
-  /@iuser/write/0.0.6:
-    resolution: {integrity: sha512-SEZsFszkcawmv2ZX8vKlYIjH5XkxKeYWzGX0rvfBpyn8vPDlb2eFmGdKtr0wZP7x4KgOYzOeSmMWUgDV1TWidA==}
+  /@iuser/write/0.0.7:
+    resolution: {integrity: sha512-OvkcTyygSHAxy27453FpnUXV3x/4Ey+mkl1vNEn5E4n37hhKcn3Cwr8jLqZYcF/oUU/aE+hQc3jPQ4UcgzQH1w==}
     dev: true
 
   /@rmw/thisdir/0.0.2:
     resolution: {integrity: sha512-KYV1t5GseFwwM0Q4mIHasm6csy9eVImOD9YLU5y8Ya3jb1hm4ahroSJSJZqFUsUAFC7CNnpvkzE703NQBCKIUg==}
+    dev: true
+
+  /@u6x/jsext/0.0.4:
+    resolution: {integrity: sha512-scxKOnyohPDb4mPS03XQ0E3vhNp7WFJ2PooSxLA8EJCLzsjya5yetnByTTQrqJDIMSEI1ei+fPeMiNNieAJ+iw==}
     dev: true
 
   /ansi-regex/5.0.1:
@@ -76,16 +81,25 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /coffee_plus/0.0.39:
-    resolution: {integrity: sha512-OwBO9JN1tNjFymAinyl6BfcpaOQCi4HglsIAuJxwbNR0GfAAhaoc7we9qlvxqYK2laSqfGB9XPooY9ni8MtL5Q==}
+  /cliui/8.0.1:
+    resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
+      wrap-ansi: 7.0.0
+    dev: true
+
+  /coffee_plus/0.0.42:
+    resolution: {integrity: sha512-3mmqK0kzrz4I6+p4d9g+WbXyEpSvf60cc2rvemsRxlYehsI+UAzZcmSJ/4U6q+WIb+B5nnDY0iJxCeG0UytEbA==}
     hasBin: true
     dependencies:
-      '@iuser/camel': 0.0.17
+      '@iuser/camel': 0.0.20
       '@iuser/walk': 0.0.2
-      '@iuser/write': 0.0.6
+      '@iuser/write': 0.0.7
       coffeescript: 2.7.0
       lodash-es: 4.17.21
-      yargs: 17.5.1
+      yargs: 17.6.0
     dev: true
 
   /coffeescript/2.7.0:
@@ -216,6 +230,10 @@ packages:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
     dev: true
 
+  /utax/0.0.9:
+    resolution: {integrity: sha512-Vx4cIB1xYySo51QB7FOCFGzjjMU1bosHFUw9K2pF5iqpvbppj6aMlrip6oChG4l5dBFMfs8uXU4qQ1SzShXnfA==}
+    dev: true
+
   /wrap-ansi/7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
@@ -240,6 +258,19 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       cliui: 7.0.4
+      escalade: 3.1.1
+      get-caller-file: 2.0.5
+      require-directory: 2.1.1
+      string-width: 4.2.3
+      y18n: 5.0.8
+      yargs-parser: 21.1.1
+    dev: true
+
+  /yargs/17.6.0:
+    resolution: {integrity: sha512-8H/wTDqlSwoSnScvV2N/JHfLWOKuh5MVla9hqLjK3nsfyy6Y4kDSYSvkU5YCUEPOSnRXfIyx3Sq+B/IWudTo4g==}
+    engines: {node: '>=12'}
+    dependencies:
+      cliui: 8.0.1
       escalade: 3.1.1
       get-caller-file: 2.0.5
       require-directory: 2.1.1

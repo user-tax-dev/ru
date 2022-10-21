@@ -2,11 +2,12 @@
   "type": "module",
   "devDependencies": {
     "@iuser/camel": "^0.0.20",
-    "@iuser/node-loader": "^0.0.25",
+    "@iuser/node-loader": "^0.0.30",
     "@iuser/read": "^0.0.5",
     "@rmw/thisdir": "^0.0.2",
-    "coffee_plus": "^0.0.39",
+    "@u6x/jsext": "^0.0.4",
+    "coffee_plus": "^0.0.42",
     "concurrently": "^7.4.0",
-    "utax": "^0.0.3"
+    "utax": "^0.0.9"
   }
 }
