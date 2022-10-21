@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-> ..:lib
+> ./lib.node:lib
 
 {
   u64Bin

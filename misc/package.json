@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "type": "module",
   "description": "rust for user.tax",
-  "main": "lib/lib.node",
+  "export": {
+    "*": "lib/*"
+  },
   "scripts": {
     "build": "cargo-cp-artifact -nc lib/lib.node -- cargo build --features main --release --message-format=json-render-diagnostics",
     "install": "npm run build",
