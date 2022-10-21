@@ -191,6 +191,15 @@ js_fn! {
     this!(cx this void {
       this.hset::<(),_,_>(
         to_bin(cx, 1)?,
+        (to_bin(cx, 2)?, to_bin(cx, 3)?),
+      )
+    })
+  }
+
+  redis_hput |cx| {
+    this!(cx this void {
+      this.hset::<(),_,_>(
+        to_bin(cx, 1)?,
         to_kvli(cx, 2, jsval2bin)?,
       )
     })
