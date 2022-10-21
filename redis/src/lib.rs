@@ -1,12 +1,11 @@
 mod init;
 use fred::{
   interfaces::{
-    ClientLike, FunctionInterface, HashesInterface, KeysInterface, SetsInterface,
-    SortedSetsInterface,
+    FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
   },
   pool::RedisPool,
-  prelude::{AsyncResult, ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::{Expiration, FromRedis},
+  prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
+  types::Expiration,
 };
 pub use init::init;
 use nlib::*;
