@@ -197,11 +197,10 @@ js_fn! {
     this!(cx this void {
       let val: RedisMap;
 
-      dbg!(cx.len());
       if cx.len() == 3 {
-        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
-      } else {
         val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
+      } else {
+        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
       }
 
       this.hset::<(),_,_>(to_bin(cx, 1)?, val)
