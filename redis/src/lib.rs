@@ -84,17 +84,17 @@ js_fn! {
   redis_new |cx| {
     let conf = RedisConfig { version: fred::types::RespVersion::RESP3, ..Default::default() };
     let server = (*cx.argument::<JsBox<ServerConfig>>(0)?).clone();
-    config.server = server;
-    config.database = Some(as_f64(cx, 1)? as u8);
-    config.username = Some(to_str(cx, 2)?);
-    config.password = Some(to_str(cx, 3)?);
+    conf.server = server;
+    conf.database = Some(as_f64(cx, 1)? as u8);
+    conf.username = Some(to_str(cx, 2)?);
+    conf.password = Some(to_str(cx, 3)?);
     let policy = ReconnectPolicy::new_exponential(0, 100, 30_000, 2);
 
     r#await(
       cx,
       async move {
-        //let client = RedisClient::new(config);
-        let client = RedisPool::new(config, 3)?;
+        //let client = RedisClient::new(conf);
+        let client = RedisPool::new(conf, 3)?;
         client.connect(Some(policy));
         client.wait_for_connect().await?;
         Ok(client)
