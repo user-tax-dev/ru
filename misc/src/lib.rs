@@ -13,7 +13,7 @@ use xxhash_rust::{xxh3::Xxh3Builder, xxh32::Xxh32};
 const XXHASHER: Xxh3Builder = Xxh3Builder::new();
 const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 
-const COOKIE_SAFE_CHAR: &'static str =
+const COOKIE_SAFE_CHAR: &str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
 js_fn! {
@@ -33,7 +33,7 @@ js_fn! {
     let len = as_f64(cx, 0)? as usize;
     let bin = as_bin(cx, 1)?;
     let mut decoded = vec![0; len];
-    stream_vbyte64::decode(&mut decoded, &bin);
+    stream_vbyte64::decode(&mut decoded, bin);
     let li = decoded.into_iter().map(|i| js_f64(cx,i as f64)).collect::<Vec<_>>();
     js_li(cx,li.into_iter())
   }
@@ -160,11 +160,11 @@ js_fn! {
     match ip{
       IpAddr::V4(ip) => {
         let o = ip.octets();
-        js_bin(cx,&[o[0], o[1], o[2], o[3]])
+        js_bin(cx,[o[0], o[1], o[2], o[3]])
       }
       IpAddr::V6(ip) => {
         let o = ip.octets();
-        js_bin(cx,&[
+        js_bin(cx,[
           o[0], o[1], o[2], o[3], o[4], o[5], o[6], o[7], o[8], o[9], o[10], o[11], o[12], o[13],
           o[14], o[15],
         ])
@@ -174,7 +174,7 @@ js_fn! {
 
   tld |cx| {
     let mut domain = &to_bin(cx, 0)?[..];
-    if let Some(d) = psl::domain(&domain){
+    if let Some(d) = psl::domain(domain){
       let len = d.suffix().as_bytes().len();
       if len > 0 {
         let mut n = domain.len()-len;
