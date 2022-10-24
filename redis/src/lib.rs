@@ -265,6 +265,16 @@ js_fn! {
     })
   }
 
+  redis_zincr |cx| {
+    this!(cx this f64 {
+      this.zincrby::<f64,_,_>(
+        to_bin(cx, 1)?,
+        1.0,
+        to_bin(cx, 2)?,
+      )
+    })
+  }
+
   redis_zadd |cx| {
     this!(cx this f64 {
       this.zadd::<f64,_,_>(
