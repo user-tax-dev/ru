@@ -1,11 +1,11 @@
 mod init;
 use fred::{
-    interfaces::{
-        FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
-    },
-    pool::RedisPool,
-    prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-    types::{Expiration, RedisMap},
+  interfaces::{
+    FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
+  },
+  pool::RedisPool,
+  prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
+  types::{Expiration, RedisMap},
 };
 pub use init::init;
 use nlib::*;
@@ -14,12 +14,12 @@ alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 
 macro_rules! this {
-    ($cx:ident $this:ident $await:ident $body:block) => {{
-        let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
-        paste! {
-          [<await_ $await>]!($cx,$body)
-        }
-    }};
+  ($cx:ident $this:ident $await:ident $body:block) => {{
+    let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
+    paste! {
+      [<await_ $await>]!($cx,$body)
+    }
+  }};
 }
 
 macro_rules! fcall_ro{
@@ -265,12 +265,18 @@ js_fn! {
     })
   }
 
-  redis_zincr |cx| {
+  redis_zadd |cx| {
     this!(cx this f64 {
-      this.zincrby::<f64,_,_>(
+      this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
-        1.0,
-        to_bin(cx, 2)?,
+        None,
+        None,
+        false,
+        false,
+        (
+          as_f64(cx, 3)?,
+          to_bin(cx, 2)?,
+        )
       )
     })
   }

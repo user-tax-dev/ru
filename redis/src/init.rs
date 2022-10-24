@@ -22,7 +22,7 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("redisSadd", crate::redis_sadd)?;
   cx.export_function("redisZscore", crate::redis_zscore)?;
   cx.export_function("redisZincrby", crate::redis_zincrby)?;
-  cx.export_function("redisZincr", crate::redis_zincr)?;
+  cx.export_function("redisZadd", crate::redis_zadd)?;
   cx.export_function("redisFnload", crate::redis_fnload)?;
   cx.export_function("redisFcall", crate::redis_fcall)?;
   cx.export_function("redisFcallR", crate::redis_fcall_r)?;
