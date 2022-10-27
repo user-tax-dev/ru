@@ -41,6 +41,19 @@ cost = (p)=>
   r
 
 do =>
+
+  console.log tld '127.0.0.1'
+  console.log tld '127.0.2.3'
+  console.log tld '1.x.com'
+  console.log tld 'localhost'
+  #console.log tld 'github.io'
+  #console.log tld 'worri.3.1.github.io'
+  #console.log tld 'worri.3.1.github.com.cn'
+  #console.log tld 'worri.3.1.github.com'
+  #console.log tld 'worri.3.1.123.io'
+  #console.log tld 'worri.3.1.123.中国'
+  #console.log tld 'worri.3.1.123.中国.pro.typeform.com'
+  return
   max = Number.MAX_SAFE_INTEGER
   for a from [2132,0,max]
     b = u64Bin a

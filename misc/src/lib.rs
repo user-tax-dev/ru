@@ -16,6 +16,16 @@ const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 const COOKIE_SAFE_CHAR: &str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
+pub fn has_digit(bytes: &[u8]) -> bool {
+  for i in bytes {
+    let i = *i;
+    if (i >= 48) && (i <= 57) {
+      return true;
+    }
+  }
+  false
+}
+
 js_fn! {
   zip_u64 |cx| {
     let mut li = vec![];
@@ -175,20 +185,23 @@ js_fn! {
   tld |cx| {
     let mut domain = &to_bin(cx, 0)?[..];
     if let Some(d) = psl::domain(domain){
-      let len = d.suffix().as_bytes().len();
+      let bytes = d.suffix().as_bytes();
+      let len = bytes.len();
       if len > 0 {
-        let mut n = domain.len()-len;
-        if n > 0 {
-          n-=1;
-        }
-        while n > 0 {
-          let t=n-1;
-          if domain[t] == b'.' {
-            break;
+        if !has_digit(bytes){
+          let mut n = domain.len()-len;
+          if n > 0 {
+            n-=1;
           }
-          n=t;
+          while n > 0 {
+            let t=n-1;
+            if domain[t] == b'.' {
+              break;
+            }
+            n=t;
+          }
+          domain = &domain[n..]
         }
-        domain = &domain[n..]
       }
     }
     return js_str(cx, String::from_utf8_lossy(domain))
