@@ -17,13 +17,10 @@ const COOKIE_SAFE_CHAR: &str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
 pub fn is_ascii_digit(bytes: &[u8]) -> bool {
-  for i in bytes {
+  bytes.iter().all(|i| {
     let i = *i;
-    if (i < 48) && (i > 57) {
-      return false;
-    }
-  }
-  true
+    (i >= b'0') && (i <= b'9')
+  })
 }
 
 js_fn! {
