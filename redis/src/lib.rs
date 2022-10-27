@@ -5,7 +5,7 @@ use fred::{
   },
   pool::RedisPool,
   prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::{Expiration, RedisMap},
+  types::{Expiration, RedisMap, SetOptions},
 };
 pub use init::init;
 use nlib::*;
@@ -280,6 +280,22 @@ js_fn! {
       this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
         None,
+        None,
+        false,
+        false,
+        (
+          as_f64(cx, 3)?,
+          to_bin(cx, 2)?,
+        )
+      )
+    })
+  }
+
+  redis_zadd_xx |cx| {
+    this!(cx this f64 {
+      this.zadd::<f64,_,_>(
+        to_bin(cx, 1)?,
+        Some(SetOptions::XX),
         None,
         false,
         false,
