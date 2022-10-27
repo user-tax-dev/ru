@@ -16,14 +16,14 @@ const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 const COOKIE_SAFE_CHAR: &str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
-pub fn has_digit(bytes: &[u8]) -> bool {
+pub fn is_ascii_digit(bytes: &[u8]) -> bool {
   for i in bytes {
     let i = *i;
-    if (i >= 48) && (i <= 57) {
-      return true;
+    if (i < 48) && (i > 57) {
+      return false;
     }
   }
-  false
+  true
 }
 
 js_fn! {
@@ -188,7 +188,7 @@ js_fn! {
       let bytes = d.suffix().as_bytes();
       let len = bytes.len();
       if len > 0 {
-        if !has_digit(bytes){
+        if !is_ascii_digit(bytes){
           let mut n = domain.len()-len;
           if n > 0 {
             n-=1;
