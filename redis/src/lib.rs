@@ -85,7 +85,10 @@ js_fn! {
     let mut conf = RedisConfig { version: fred::types::RespVersion::RESP3, ..Default::default() };
     let server = (*cx.argument::<JsBox<ServerConfig>>(0)?).clone();
     conf.server = server;
-    conf.database = Some(as_f64(cx, 1)? as u8);
+    let database = as_f64(cx, 1)? as u8;
+    if(database != 0){
+      conf.database = Some(database);
+    }
     conf.username = Some(to_str(cx, 2)?);
     conf.password = Some(to_str(cx, 3)?);
     let policy = ReconnectPolicy::new_exponential(0, 100, 30_000, 2);
