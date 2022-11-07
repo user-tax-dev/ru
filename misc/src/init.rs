@@ -5,6 +5,7 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("unzipU64", crate::unzip_u64)?;
   cx.export_function("b64", crate::b64)?;
   cx.export_function("unb64", crate::unb64)?;
+  cx.export_function("b64U64", crate::b64_u64)?;
   cx.export_function("u64B64", crate::u64_b64)?;
   cx.export_function("u64Bin", crate::u64_bin)?;
   cx.export_function("binU64", crate::bin_u64)?;

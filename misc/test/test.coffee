@@ -3,6 +3,8 @@
 > ./lib.node:lib
 
 {
+  u64B64
+  b64U64
   u64Bin
   binU64
   b64
@@ -42,6 +44,10 @@ cost = (p)=>
 
 do =>
 
+  r = u64B64 12345678
+  console.log r
+  console.log b64U64 r
+  return
   console.log tld '127.0.0.1'
   console.log tld '127.0.2.3'
   console.log tld '1.x.com'

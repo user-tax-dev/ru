@@ -16,6 +16,14 @@ const BASE64: Base64 = Base64::URL_SAFE_NO_PAD;
 const COOKIE_SAFE_CHAR: &str =
   "!#$%&'()*+-./0123456789:<>?@ABDEFGHIJKLMNQRSTUVXYZ[]^_`abdefghijklmnqrstuvxyz{|}~";
 
+fn _b64_f64(bytes: &[u8]) -> anyhow::Result<f64> {
+  let r = BASE64.decode_to_boxed_bytes(bytes)?;
+  let mut x = [0u8; 8];
+  let n = x.len() - r.len();
+  x[n..].clone_from_slice(&r);
+  Ok(u64::from_le_bytes(x) as f64)
+}
+
 pub fn is_ascii_digit(bytes: &[u8]) -> bool {
   bytes.iter().all(|i| {
     let i = *i;
@@ -57,6 +65,11 @@ js_fn! {
   unb64 |cx| {
     let s = to_bin(cx,0)?;
     js_bin(cx,ok!(cx,BASE64.decode_to_boxed_bytes(&s)))
+  }
+
+  b64_u64 |cx| {
+    let s = to_bin(cx,0)?;
+    js_f64(cx, ok!(cx,_b64_f64(&s)))
   }
 
   u64_b64 |cx| {

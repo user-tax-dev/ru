@@ -820,6 +820,7 @@ dependencies = [
 name = "misc"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "base-x",
  "base64-simd",
  "blake3",
