@@ -19,8 +19,7 @@ const COOKIE_SAFE_CHAR: &str =
 fn _b64_f64(bytes: &[u8]) -> anyhow::Result<f64> {
   let r = BASE64.decode_to_boxed_bytes(bytes)?;
   let mut x = [0u8; 8];
-  let n = x.len() - r.len();
-  x[n..].clone_from_slice(&r);
+  x[..r.len()].clone_from_slice(&r);
   Ok(u64::from_le_bytes(x) as f64)
 }
 
@@ -75,14 +74,14 @@ js_fn! {
   u64_b64 |cx| {
     let x = (as_f64(cx, 0)? as u64).to_le_bytes();
     let x = &x;
-    let mut n = 0;
-    while n < x.len() {
+    let mut n = x.len();
+    while n != 0 {
+      n-=1;
       if x[n] != 0 {
         break;
       }
-      n+=1;
     }
-    js_str(cx,BASE64.encode_to_boxed_str(&x[n..]))
+    js_str(cx,BASE64.encode_to_boxed_str(&x[..n+1]))
   }
 
   u64_bin |cx| {
