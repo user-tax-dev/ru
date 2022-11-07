@@ -86,7 +86,7 @@ js_fn! {
     let server = (*cx.argument::<JsBox<ServerConfig>>(0)?).clone();
     conf.server = server;
     let database = as_f64(cx, 1)? as u8;
-    if(database != 0){
+    if database != 0 {
       conf.database = Some(database);
     }
     conf.username = Some(to_str(cx, 2)?);

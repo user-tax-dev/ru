@@ -59,6 +59,30 @@ js_fn! {
     js_bin(cx,ok!(cx,BASE64.decode_to_boxed_bytes(&s)))
   }
 
+  u64_b64 |cx| {
+    let x = (as_f64(cx, 0)? as u64).to_le_bytes();
+    let x = &x;
+    let mut n = 0;
+    while n < x.len() {
+      if x[n] != 0 {
+        break;
+      }
+      n+=1;
+    }
+    js_str(cx,BASE64.encode_to_boxed_str(&x[n..]))
+  }
+
+  u64_bin |cx| {
+    let x = as_f64(cx, 0)? as u64;
+    js_bin(cx, &ok!(cx,x.to_variable_vec()))
+  }
+
+  bin_u64 |cx| {
+    let x = as_bin(cx, 0)?;
+    let x = ok!(cx,u64::decode_variable(x)) as f64;
+    js_f64(cx, x)
+  }
+
   password_hash |cx| {
     let mut hasher = blake3::Hasher::new();
     for i in 0..cx.len() {
@@ -76,17 +100,6 @@ js_fn! {
       hasher.finalize_xof().fill(&mut output);
       Ok(Box::from(&output[..]))
     })
-  }
-
-  u64_bin |cx| {
-    let x = as_f64(cx, 0)? as u64;
-    js_bin(cx, &ok!(cx,x.to_variable_vec()))
-  }
-
-  bin_u64 |cx| {
-    let x = as_bin(cx, 0)?;
-    let x = ok!(cx,u64::decode_variable(x)) as f64;
-    js_f64(cx, x)
   }
 
   z85_load |cx| {
