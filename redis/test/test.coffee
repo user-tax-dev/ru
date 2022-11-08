@@ -1,11 +1,14 @@
 #!/usr/bin/env coffee
 
-> ..:lib
+> ./lib.node:lib
 
+console.log lib
+###
 {
   serverHostPort
   Redis
 } = lib
+
 
 {
   REDIS_HOST
@@ -35,7 +38,7 @@ console.log await redis.get(key)
 console.log await redis.del(key)
 console.log await redis.get(key)
 console.log await redis.setex(key,'123',3)
-
+###
 ###
 {
   u64Bin
