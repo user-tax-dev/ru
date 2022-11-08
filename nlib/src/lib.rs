@@ -7,6 +7,59 @@ use once_cell::sync::OnceCell;
 pub use paste::paste;
 use tokio::runtime::Runtime;
 
+pub trait AsValue {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue>;
+}
+
+macro_rules! as_value_number {
+  ($($ty:ty),*) => {
+    $(
+      impl AsValue for $ty {
+        fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+          cx.number(self as f64).as_value(cx)
+        }
+      }
+    )*
+  };
+}
+
+as_value_number!(f64, u64, i64, f32, u32, i32, u16, i16, u8, i8);
+
+impl AsValue for () {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.undefined().as_value(cx)
+  }
+}
+
+impl AsValue for String {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.string(self).as_value(cx)
+  }
+}
+
+macro_rules! as_value_bin {
+  ($($ty:ty),*) => {
+    $(
+      impl AsValue for $ty {
+        fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+          JsUint8Array::from_slice(cx, &self).unwrap().as_value(cx)
+        }
+      }
+    )*
+  };
+}
+
+as_value_bin!(Vec<u8>, Box<[u8]>, &[u8]);
+
+impl<T: AsValue> AsValue for Option<T> {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    match self {
+      Some(b) => b.as_value(cx),
+      None => cx.undefined().as_value(cx),
+    }
+  }
+}
+
 #[macro_export]
 macro_rules! ok {
   ($cx:ident,$body:expr) => {
@@ -258,16 +311,6 @@ pub fn await_void<'a, C: Context<'a>>(
   r#await(cx, f, |mut cx, _| js_undefined(&mut cx))
 }
 
-pub trait AsValue {
-  fn as_value<'a, C: Context<'a>>(&self, cx: &mut C) -> Handle<'a, JsValue>;
-}
-
-impl AsValue for u64 {
-  fn as_value<'a, C: Context<'a>>(&self, cx: &mut C) -> Handle<'a, JsValue> {
-    cx.number(*self as f64).as_value(cx)
-  }
-}
-
 pub fn js_li<'a, C: Context<'a>, T: Iterator<Item = impl AsValue> + ExactSizeIterator>(
   cx: &mut C,
   iter: T,
@@ -299,3 +342,18 @@ await_trait!(
   Iterator<Item = impl AsValue> + ExactSizeIterator,
   Option<T>
 );
+
+pub fn await_as_value<'a, T: 'static + Send + AsValue, C: Context<'a>>(
+  cx: &mut C,
+  f: impl std::future::Future<Output = anyhow::Result<T>> + Send + 'static,
+) -> JsResult<'a, JsValue> {
+  r#await(cx, f, |mut cx, r| Ok(r.as_value(&mut cx)))
+}
+
+#[macro_export]
+macro_rules! await_as_value {
+  ($cx:expr, $r:expr) => {{
+    let r = $r;
+    await_as_value($cx, async move { Ok(r.await?) })
+  }};
+}

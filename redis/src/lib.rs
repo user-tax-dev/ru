@@ -13,6 +13,15 @@ use nlib::*;
 alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 
+macro_rules! th2 {
+  ($cx:ident $this:ident $body:block) => {{
+    let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
+    paste! {
+      await_as_value!($cx,$body)
+    }
+  }};
+}
+
 macro_rules! this {
   ($cx:ident $this:ident $await:ident $body:block) => {{
     let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
@@ -107,13 +116,13 @@ js_fn! {
   }
 
   redis_quit |cx| {
-    this!(cx this void {
+    th2!(cx this {
       this.quit_pool()
     })
   }
 
   redis_get |cx| {
-    this!(cx this option_str {
+    th2!(cx this {
       this.get::<Option<String>, _>(to_bin(cx, 1)?)
     })
   }
@@ -279,7 +288,7 @@ js_fn! {
   }
 
   redis_zadd |cx| {
-    this!(cx this f64 {
+    th2!(cx this {
       this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
         None,
@@ -295,7 +304,7 @@ js_fn! {
   }
 
   redis_zadd_xx |cx| {
-    this!(cx this f64 {
+    th2!(cx this {
       this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
         Some(SetOptions::XX),
