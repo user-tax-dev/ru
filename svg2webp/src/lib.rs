@@ -51,6 +51,6 @@ js_fn! {
 svg_webp |cx| {
   let svg = to_bin(cx, 0)?;
   let quality = cx.argument::<JsNumber>(1)?.value(cx) as f32;
-  await_bin(cx, async move { _svg_webp(svg, quality) })
+  await_bin(cx, async move { _svg_webp(svg, quality) })?
 }
 }
