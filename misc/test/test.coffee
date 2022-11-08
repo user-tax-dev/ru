@@ -43,6 +43,18 @@ cost = (p)=>
   r
 
 do =>
+  max = Number.MAX_SAFE_INTEGER
+  for a from [2132,0,max]
+    b = u64Bin a
+    b = binU64 b
+    console.log a==b
+  li = [1,2,3,max]
+  console.log li
+  bin = zipU64(...li)
+  console.log unzipU64 4,bin
+  console.log bin
+
+  return
 
   r = u64B64 12345678
   console.log r
@@ -59,18 +71,6 @@ do =>
   #console.log tld 'worri.3.1.123.io'
   #console.log tld 'worri.3.1.123.中国'
   #console.log tld 'worri.3.1.123.中国.pro.typeform.com'
-  return
-  max = Number.MAX_SAFE_INTEGER
-  for a from [2132,0,max]
-    b = u64Bin a
-    b = binU64 b
-    console.log a==b
-  li = [1,2,3,max]
-  console.log li
-  bin = zipU64(...li)
-  console.log unzipU64 4,bin
-  console.log bin
-
   return
   sk = '123'
   c = randomBytes(8)
