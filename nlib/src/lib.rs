@@ -1,4 +1,7 @@
 #![feature(macro_metavar_expr)]
+#![feature(specialization)]
+
+use std::borrow::Cow;
 
 pub use neon::prelude::*;
 use neon::{result::Throw, types::buffer::TypedArray};
@@ -25,15 +28,39 @@ macro_rules! as_value_number {
 
 as_value_number!(f64, u64, i64, f32, u32, i32, u16, i16, u8, i8);
 
-impl AsValue for bool {
+impl AsValue for Vec<u64> {
   fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
-    cx.boolean(self).as_value(cx)
+    let li = JsArray::new(cx, self.len() as u32);
+    for (i, v) in self.into_iter().enumerate() {
+      let v = v.as_value(cx);
+      li.set(cx, i as u32, v);
+    }
+
+    li.as_value(cx)
   }
 }
 
 impl AsValue for () {
   fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
     cx.undefined().as_value(cx)
+  }
+}
+
+impl AsValue for Cow<'_, str> {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.string(self).as_value(cx)
+  }
+}
+
+impl AsValue for Box<str> {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.string(self).as_value(cx)
+  }
+}
+
+impl AsValue for bool {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.boolean(self).as_value(cx)
   }
 }
 
@@ -78,14 +105,15 @@ macro_rules! ok {
 
 #[macro_export]
 macro_rules! js_fn {
-  ($fn:ident |$cx:ident| $body:block) => {
+  ($fn:ident |$cx:ident| $body:tt) => {
     nlib::paste! {
       pub fn $fn(mut $cx: Cx) -> JsResult<JsValue> {
         let $cx = &mut $cx;
-        $body
+        Ok($body.as_value($cx))
       }
     }
   };
+
   ($($fn:ident |$cx:ident| $body:block)+) => {
     $(
       js_fn!($fn |$cx| $body);
