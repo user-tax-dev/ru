@@ -258,15 +258,44 @@ pub fn await_void<'a, C: Context<'a>>(
   r#await(cx, f, |mut cx, _| js_undefined(&mut cx))
 }
 
-pub fn js_li<'a, C: Context<'a>, I: Iterator<Item = JsResult<'a, JsValue>> + ExactSizeIterator>(
+pub trait AsValue {
+  fn as_value<'a, C: Context<'a>>(&self, cx: &mut C) -> Handle<'a, JsValue>;
+}
+
+impl AsValue for u64 {
+  fn as_value<'a, C: Context<'a>>(&self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.number(*self as f64).as_value(cx)
+  }
+}
+
+pub fn js_li<'a, C: Context<'a>, T: Iterator<Item = impl AsValue> + ExactSizeIterator>(
   cx: &mut C,
-  iter: I,
+  iter: T,
 ) -> JsResult<'a, JsValue> {
   let li = JsArray::new(cx, iter.len() as u32);
 
   for (i, v) in iter.enumerate() {
-    li.set(cx, i as u32, v?)?;
+    let v = v.as_value(cx);
+    li.set(cx, i as u32, v)?;
   }
 
   Ok(li.as_value(cx))
 }
+
+pub fn js_option_li<'a, C: Context<'a>, T: Iterator<Item = impl AsValue> + ExactSizeIterator>(
+  cx: &mut C,
+  b: Option<T>,
+) -> JsResult<'a, JsValue> {
+  match b {
+    Some(b) => js_li(cx, b),
+    None => Ok(cx.undefined().as_value(cx)),
+  }
+}
+
+await_trait!(li, Iterator<Item = impl AsValue> + ExactSizeIterator, T);
+
+await_trait!(
+  option_li,
+  Iterator<Item = impl AsValue> + ExactSizeIterator,
+  Option<T>
+);

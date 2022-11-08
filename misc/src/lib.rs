@@ -48,8 +48,7 @@ js_fn! {
     let bin = as_bin(cx, 1)?;
     let mut decoded = vec![0; len];
     stream_vbyte64::decode(&mut decoded, bin);
-    let li = decoded.into_iter().map(|i| js_f64(cx,i as f64)).collect::<Vec<_>>();
-    js_li(cx,li.into_iter())
+    js_li(cx,decoded.into_iter())
   }
 
   b64 |cx| {
