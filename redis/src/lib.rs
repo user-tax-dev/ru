@@ -13,7 +13,7 @@ use nlib::*;
 alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 
-macro_rules! th2 {
+macro_rules! this {
   ($cx:ident $this:ident $body:block) => {{
     let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
     paste! {
@@ -22,21 +22,12 @@ macro_rules! th2 {
   }};
 }
 
-macro_rules! this {
-  ($cx:ident $this:ident $await:ident $body:block) => {{
-    let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
-    paste! {
-      [<await_ $await>]!($cx,$body)
-    }
-  }};
-}
-
 macro_rules! fcall_ro{
-  ($cx:ident, $rt:ident, $ty:ty)=>{{
+  ($cx:ident, $ty:ty)=>{{
     let name = to_str($cx, 1)?;
     let keys = to_bin_li($cx, 2)?;
     let vals = to_bin_li($cx, 3)?;
-    this!($cx this $rt {
+    this!($cx this {
       this.fcall_ro::<$ty,_,_,_>(
         name,
         keys,
@@ -47,12 +38,12 @@ macro_rules! fcall_ro{
 }
 
 macro_rules! fcall{
-  ($cx:ident, $rt:ident, $ty:ty)=>{{
+  ($cx:ident, $ty:ty)=>{{
     let name = to_str($cx, 1)?;
     let keys = to_bin_li($cx, 2)?;
     let vals = to_bin_li($cx, 3)?;
     if keys.len() > 0{
-      this!($cx this $rt {
+      this!($cx this {
         this.fcall::<$ty,_,_,_>(
           name,
           keys,
@@ -60,7 +51,7 @@ macro_rules! fcall{
         )
       })
     } else {
-      this!($cx this $rt {
+      this!($cx this {
         this.fcall_ro::<$ty,_,_,_>(
           name,
           keys,
@@ -116,25 +107,25 @@ js_fn! {
   }
 
   redis_quit |cx| {
-    th2!(cx this {
+    this!(cx this {
       this.quit_pool()
     })
   }
 
   redis_get |cx| {
-    th2!(cx this {
+    this!(cx this {
       this.get::<Option<String>, _>(to_bin(cx, 1)?)
     })
   }
 
   redis_get_b |cx| {
-    this!(cx this option_bin {
+    this!(cx this {
       this.get::<Option<Vec<u8>>, _>(to_bin(cx, 1)?)
     })
   }
 
   redis_set |cx| {
-    this!(cx this void {
+    this!(cx this {
       this.set::<(),_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -146,7 +137,7 @@ js_fn! {
   }
 
   redis_setex |cx| {
-    this!(cx this void {
+    this!(cx this  {
       this.set::<(),_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -158,7 +149,7 @@ js_fn! {
   }
 
   redis_expire |cx| {
-    this!(cx this bool {
+    this!(cx this {
       this.expire::<bool,_>(
         to_bin(cx, 1)?,
         as_f64(cx, 2)? as _
@@ -167,19 +158,19 @@ js_fn! {
   }
 
   redis_del |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.del::<u32,_>(args_bin_li(cx,1)?)
     })
   }
 
   redis_exist |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.exists::<u32,_>(args_bin_li(cx,1)?)
     })
   }
 
   redis_hget |cx| {
-    this!(cx this option_str {
+    this!(cx this {
       this.hget::<Option<String>,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -188,7 +179,7 @@ js_fn! {
   }
 
   redis_hget_b |cx| {
-    this!(cx this option_bin {
+    this!(cx this {
       this.hget::<Option<Vec<u8>>,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -197,7 +188,7 @@ js_fn! {
   }
 
   redis_hget_n |cx| {
-    this!(cx this option_f64 {
+    this!(cx this {
       this.hget::<Option<f64>,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -206,7 +197,7 @@ js_fn! {
   }
 
   redis_hset |cx| {
-    this!(cx this void {
+    this!(cx this {
       let val: RedisMap;
 
       if cx.len() == 3 {
@@ -221,7 +212,7 @@ js_fn! {
   }
 
   redis_hincrby |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.hincrby::<f64,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -231,7 +222,7 @@ js_fn! {
   }
 
   redis_hincr |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.hincrby::<f64,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -241,7 +232,7 @@ js_fn! {
   }
 
   redis_hexist |cx| {
-    this!(cx this bool {
+    this!(cx this {
       this.hexists::<bool,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -250,7 +241,7 @@ js_fn! {
   }
 
   redis_sadd |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.sadd::<f64,_,_>(
         to_bin(cx, 1)?,
         args_bin_li(cx, 2)?,
@@ -259,7 +250,7 @@ js_fn! {
   }
 
   redis_zscore |cx| {
-    this!(cx this option_f64 {
+    this!(cx this {
       this.zscore::<Option<f64>,_,_>(
         to_bin(cx, 1)?,
         to_bin(cx, 2)?,
@@ -268,7 +259,7 @@ js_fn! {
   }
 
   redis_zincrby |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.zincrby::<f64,_,_>(
         to_bin(cx, 1)?,
         as_f64(cx, 3)?,
@@ -278,7 +269,7 @@ js_fn! {
   }
 
   redis_zincr |cx| {
-    this!(cx this f64 {
+    this!(cx this {
       this.zincrby::<f64,_,_>(
         to_bin(cx, 1)?,
         1.0,
@@ -288,7 +279,7 @@ js_fn! {
   }
 
   redis_zadd |cx| {
-    th2!(cx this {
+    this!(cx this {
       this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
         None,
@@ -304,7 +295,7 @@ js_fn! {
   }
 
   redis_zadd_xx |cx| {
-    th2!(cx this {
+    this!(cx this {
       this.zadd::<f64,_,_>(
         to_bin(cx, 1)?,
         Some(SetOptions::XX),
@@ -320,7 +311,7 @@ js_fn! {
   }
 
   redis_fnload |cx| {
-    this!(cx this str {
+    this!(cx this {
       this.function_load::<String,_>(
         true,
         to_str(cx, 1)?,
@@ -328,15 +319,15 @@ js_fn! {
     })
   }
 
-  redis_fcall |cx| { fcall!(cx,void,()) }
-  redis_fcall_r |cx| { fcall_ro!(cx,void,()) }
-  redis_fbool |cx| { fcall!(cx,option_bool,Option<bool>) }
-  redis_fbool_r |cx| { fcall_ro!(cx,option_bool,Option<bool>) }
-  redis_fbin |cx| { fcall!(cx,option_bin,Option<Vec<u8>>) }
-  redis_fbin_r |cx| { fcall_ro!(cx,option_bin,Option<Vec<u8>>) }
-  redis_fnum |cx| { fcall!(cx,option_f64,Option<f64>) }
-  redis_fnum_r |cx| { fcall_ro!(cx,option_f64,Option<f64>) }
-  redis_fstr |cx| { fcall!(cx,option_str,Option<String>) }
-  redis_fstr_r |cx| { fcall_ro!(cx,option_str,Option<String>) }
+  redis_fcall |cx| { fcall!(cx,()) }
+  redis_fcall_r |cx| { fcall_ro!(cx,()) }
+  redis_fbool |cx| { fcall!(cx,Option<bool>) }
+  redis_fbool_r |cx| { fcall_ro!(cx,Option<bool>) }
+  redis_fbin |cx| { fcall!(cx,Option<Vec<u8>>) }
+  redis_fbin_r |cx| { fcall_ro!(cx,Option<Vec<u8>>) }
+  redis_fnum |cx| { fcall!(cx,Option<f64>) }
+  redis_fnum_r |cx| { fcall_ro!(cx,Option<f64>) }
+  redis_fstr |cx| { fcall!(cx,Option<String>) }
+  redis_fstr_r |cx| { fcall_ro!(cx,Option<String>) }
 
 }

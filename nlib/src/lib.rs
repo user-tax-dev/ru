@@ -25,6 +25,12 @@ macro_rules! as_value_number {
 
 as_value_number!(f64, u64, i64, f32, u32, i32, u16, i16, u8, i8);
 
+impl AsValue for bool {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    cx.boolean(self).as_value(cx)
+  }
+}
+
 impl AsValue for () {
   fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
     cx.undefined().as_value(cx)
