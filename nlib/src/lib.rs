@@ -1,5 +1,4 @@
 #![feature(macro_metavar_expr)]
-#![feature(specialization)]
 
 use std::borrow::Cow;
 
@@ -12,6 +11,19 @@ use tokio::runtime::Runtime;
 
 pub trait AsValue {
   fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue>;
+}
+
+#[macro_export]
+macro_rules! as_value_cls {
+  ($($cls:ty),*) => {
+    $(
+    impl nlib::AsValue for $cls {
+      fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+        cx.boxed(self).as_value(cx)
+      }
+    }
+    )*
+  };
 }
 
 macro_rules! as_value_number {
@@ -33,7 +45,7 @@ impl AsValue for Vec<u64> {
     let li = JsArray::new(cx, self.len() as u32);
     for (i, v) in self.into_iter().enumerate() {
       let v = v.as_value(cx);
-      li.set(cx, i as u32, v);
+      let _ = li.set(cx, i as u32, v);
     }
 
     li.as_value(cx)

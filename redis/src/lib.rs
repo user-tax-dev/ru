@@ -12,13 +12,12 @@ use nlib::*;
 
 alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
+as_value_cls!(ServerConfig, Redis);
 
 macro_rules! this {
   ($cx:ident $this:ident $body:block) => {{
     let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
-    paste! {
-      await_as_value!($cx,$body)
-    }
+    await_as_value!($cx, $body)?
   }};
 }
 
@@ -67,18 +66,17 @@ js_fn! {
   server_host_port |cx| {
     let host = to_str(cx, 0)?;
     let port = as_f64(cx, 1)? as u16;
-    js_box(cx, ServerConfig(Config::Centralized { host, port }))
+    ServerConfig(Config::Centralized { host, port })
   }
 
   server_cluster |cx| {
-    let conf = ServerConfig(Config::Clustered {
+    ServerConfig(Config::Clustered {
       hosts:to_kvli(
               cx,
               0,
               jsval2num::<u16>
             )?
-    });
-    js_box(cx,conf)
+    })
   }
 
   redis_new |cx| {
@@ -102,8 +100,8 @@ js_fn! {
         client.wait_for_connect().await?;
         Ok(client)
       },
-      |mut cx, client| Ok(cx.boxed(Redis(client)).as_value(&mut cx)),
-    )
+      |mut cx, client| Ok(Redis(client).as_value(&mut cx)),
+    )?
   }
 
   redis_quit |cx| {
