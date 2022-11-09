@@ -14,6 +14,21 @@ alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 as_value_cls!(ServerConfig, Redis);
 
+fn offset_limit<'a, C: Context<'a>>(cx: &'a mut C, n: usize) -> JsResult<'a, Option<(i64, i64)>> {
+  let offset_limit = if cx.len() >= n {
+    let limit = as_f64(cx, n)? as i64;
+    let n = n + 1;
+    let offset = if cx.len() >= n {
+      as_f64(cx, n)? as i64
+    } else {
+      0
+    };
+    Some((offset, limit))
+  } else {
+    None
+  };
+}
+
 macro_rules! this {
   ($cx:ident $this:ident $body:block) => {{
     let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
@@ -278,26 +293,13 @@ js_fn! {
 
   // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore_withscores |cx| {
-    let offset_limit = if cx.len() >= 4 {
-      let limit = as_f64(cx,4)? as i64;
-      let offset = if cx.len() >= 5 {
-        as_f64(cx,5)? as i64
-      }else{
-        0
-      };
-      Some((offset,limit))
-    }else{
-      None
-    };
-
-
     this!(cx this {
       this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
         to_bin(cx, 1)?,
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         true,
-        offset_limit
+        offset_limit(cx,4)?
       )
     })
   }
