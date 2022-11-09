@@ -5,7 +5,7 @@ use fred::{
   },
   pool::RedisPool,
   prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::{Expiration, RedisMap, SetOptions, ZRange},
+  types::{Expiration, RedisMap, SetOptions, ZRange, ZRangeBound, ZRangeKind},
 };
 pub use init::init;
 use nlib::*;
@@ -13,6 +13,49 @@ use nlib::*;
 alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 as_value_cls!(ServerConfig, Redis);
+
+fn min_max_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
+  let len = cx.len();
+  let min = if len > 2 {
+    to_zrange(cx, 2)?
+  } else {
+    ZRange {
+      kind: ZRangeKind::Inclusive,
+      range: ZRangeBound::NegInfiniteScore,
+    }
+  };
+  let max = if len > 3 {
+    to_zrange(cx, 3)?
+  } else {
+    ZRange {
+      kind: ZRangeKind::Inclusive,
+      range: ZRangeBound::InfiniteScore,
+    }
+  };
+  Ok((min, max))
+}
+
+fn max_min_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
+  let len = cx.len();
+
+  let max = if len > 2 {
+    to_zrange(cx, 2)?
+  } else {
+    ZRange {
+      kind: ZRangeKind::Inclusive,
+      range: ZRangeBound::InfiniteScore,
+    }
+  };
+  let min = if len > 3 {
+    to_zrange(cx, 3)?
+  } else {
+    ZRange {
+      kind: ZRangeKind::Inclusive,
+      range: ZRangeBound::NegInfiniteScore,
+    }
+  };
+  Ok((max, min))
+}
 
 pub fn to_zrange(cx: &'_ mut Cx, n: usize) -> Result<ZRange, Throw> {
   let val = cx.argument::<JsValue>(n)?;
@@ -304,10 +347,11 @@ js_fn! {
   // args : key,min,max,[limit],[offset]
   redis_zrangebyscore |cx| {
     this!(cx this {
+      let (min,max) = min_max_score(cx)?;
       this.zrangebyscore::<Vec<Vec<u8>>,_,_,_>(
         to_bin(cx, 1)?,
-        to_zrange(cx, 2)?,
-        to_zrange(cx, 3)?,
+        min,
+        max,
         false,
         limit_offset(cx,4)?
       )
@@ -316,23 +360,24 @@ js_fn! {
 
   redis_zrangebyscore_withscores |cx| {
     this!(cx this {
+      let (min,max) = min_max_score(cx)?;
       this.zrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
         to_bin(cx, 1)?,
-        to_zrange(cx, 2)?,
-        to_zrange(cx, 3)?,
+        min,
+        max,
         true,
         limit_offset(cx,4)?
       )
     })
   }
 
-  // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore |cx| {
     this!(cx this {
+      let (max,min) = max_min_score(cx)?;
       this.zrevrangebyscore::<Vec<Vec<u8>>,_,_,_>(
         to_bin(cx, 1)?,
-        to_zrange(cx, 2)?,
-        to_zrange(cx, 3)?,
+        max,
+        min,
         false,
         limit_offset(cx,4)?
       )
@@ -341,10 +386,11 @@ js_fn! {
 
   redis_zrevrangebyscore_withscores |cx| {
     this!(cx this {
+      let (max,min) = max_min_score(cx)?;
       this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
         to_bin(cx, 1)?,
-        to_zrange(cx, 2)?,
-        to_zrange(cx, 3)?,
+        max,
+        min,
         true,
         limit_offset(cx,4)?
       )
