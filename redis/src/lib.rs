@@ -291,6 +291,43 @@ js_fn! {
     })
   }
 
+  redis_zrangebyscore |cx| {
+    this!(cx this {
+      this.zrangebyscore::<Vec<Vec<u8>>,_,_,_>(
+        to_bin(cx, 1)?,
+        to_str(cx, 2)?,
+        to_str(cx, 3)?,
+        false,
+        offset_limit(cx,4)?
+      )
+    })
+  }
+
+  // args : key,max,min,[limit],[offset]
+  redis_zrangebyscore_withscores |cx| {
+    this!(cx this {
+      this.zrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
+        to_bin(cx, 1)?,
+        to_str(cx, 2)?,
+        to_str(cx, 3)?,
+        true,
+        offset_limit(cx,4)?
+      )
+    })
+  }
+
+  redis_zrevrangebyscore |cx| {
+    this!(cx this {
+      this.zrevrangebyscore::<Vec<Vec<u8>>,_,_,_>(
+        to_bin(cx, 1)?,
+        to_str(cx, 2)?,
+        to_str(cx, 3)?,
+        false,
+        offset_limit(cx,4)?
+      )
+    })
+  }
+
   // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore_withscores |cx| {
     this!(cx this {
