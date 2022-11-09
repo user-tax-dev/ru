@@ -40,6 +40,7 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("redisFnumR", crate::redis_fnum_r)?;
   cx.export_function("redisFstr", crate::redis_fstr)?;
   cx.export_function("redisFstrR", crate::redis_fstr_r)?;
+  cx.export_function("redisTestz", crate::redis_testz)?;
   Ok(())
 }
 

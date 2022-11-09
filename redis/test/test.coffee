@@ -24,10 +24,18 @@ redis = await Redis(
   REDIS_PASSWORD
 )
 
-
+console.log 1
+console.log await redis.zrevrangebyscore(
+  Uint8Array.from [ 4, 0, 16, 126 ]
+)
+console.log await redis.testz(
+  Uint8Array.from [ 4, 0, 16, 126 ]
+)
+console.log 2
 console.log await redis.zrevrangebyscoreWithscores(
   Uint8Array.from [ 4, 0, 16, 126 ]
 )
+console.log 3
 
 # key = 'test'
 #key = Buffer.from [1,2,3]

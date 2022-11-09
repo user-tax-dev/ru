@@ -266,9 +266,9 @@ js_fn! {
     this!(cx this {
       let val: RedisMap;
       if cx.len() == 3 {
-         val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
+        val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
       } else {
-         val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
+        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
       }
       this.hset::<(),_,_>(to_bin(cx, 1)?, val)
 
@@ -446,5 +446,20 @@ js_fn! {
   redis_fnum_r |cx| { fcall_ro!(cx,Option<f64>) }
   redis_fstr |cx| { fcall!(cx,Option<String>) }
   redis_fstr_r |cx| { fcall_ro!(cx,Option<String>) }
+
+  redis_testz |cx| {
+    let this = &cx.argument::<JsBox<Redis>>(0)?.0;
+    jswait(cx, async move {
+      let (max,min) = max_min_score(cx)?;
+      let r = this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
+        to_bin(cx, 1)?,
+        max,
+        min,
+        true,
+        limit_offset(cx,4)?
+      );
+      Ok(r.await?)
+    })?
+  }
 
 }
