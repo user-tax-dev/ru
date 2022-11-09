@@ -264,14 +264,11 @@ js_fn! {
 
   redis_hset |cx| {
     this!(cx this {
-      let val: RedisMap;
-
-      if cx.len() == 3 {
-        val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
+      let val: RedisMap = if cx.len() == 3 {
+         ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
       } else {
-        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
-      }
-
+         ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
+      };
       this.hset::<(),_,_>(to_bin(cx, 1)?, val)
 
     })
