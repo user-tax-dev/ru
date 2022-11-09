@@ -26,7 +26,7 @@ fn _b64_f64(bytes: &[u8]) -> anyhow::Result<f64> {
 pub fn is_ascii_digit(bytes: &[u8]) -> bool {
   bytes.iter().all(|i| {
     let i = *i;
-    (i >= b'0') && (i <= b'9')
+    (b'0'..=b'9').contains(&i)
   })
 }
 
@@ -198,21 +198,17 @@ js_fn! {
     if let Some(d) = psl::domain(domain){
       let bytes = d.suffix().as_bytes();
       let len = bytes.len();
-      if len > 0 {
-        if !is_ascii_digit(bytes){
-          let mut n = domain.len()-len;
-          if n > 0 {
-            n-=1;
+      if len > 0 && !is_ascii_digit(bytes) {
+        let mut n = domain.len()-len;
+        n = n.saturating_sub(1);
+        while n > 0 {
+          let t=n-1;
+          if domain[t] == b'.' {
+            break;
           }
-          while n > 0 {
-            let t=n-1;
-            if domain[t] == b'.' {
-              break;
-            }
-            n=t;
-          }
-          domain = &domain[n..]
+          n=t;
         }
+        domain = &domain[n..]
       }
     }
     unsafe { String::from_utf8_unchecked(domain.into()) }
