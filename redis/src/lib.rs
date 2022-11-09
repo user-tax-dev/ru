@@ -5,7 +5,7 @@ use fred::{
   },
   pool::RedisPool,
   prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::{Expiration, RedisMap, SetOptions},
+  types::{Expiration, RedisMap, SetOptions, ZRange},
 };
 pub use init::init;
 use nlib::*;
@@ -13,6 +13,15 @@ use nlib::*;
 alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 as_value_cls!(ServerConfig, Redis);
+
+pub fn to_zrange(cx: &'_ mut Cx, n: usize) -> Result<ZRange, Throw> {
+  let val = cx.argument::<JsValue>(n)?;
+  Ok(if val.is_a::<JsString, _>(cx) {
+    val.downcast_or_throw::<JsString, _>(cx)?.value(cx).into()
+  } else if val.is_a::<JsNumber, _>(cx) {
+    val.downcast_or_throw::<JsNumber, _>(cx)?.value(cx).into()
+  })
+}
 
 fn limit_offset(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
   let len = cx.len();
@@ -288,50 +297,50 @@ js_fn! {
     })
   }
 
+  // args : key,min,max,[limit],[offset]
   redis_zrangebyscore |cx| {
     this!(cx this {
       this.zrangebyscore::<Vec<Vec<u8>>,_,_,_>(
         to_bin(cx, 1)?,
-        to_str(cx, 2)?,
-        to_str(cx, 3)?,
+        to_zrange(cx, 2)?,
+        to_zrange(cx, 3)?,
         false,
         limit_offset(cx,4)?
       )
     })
   }
 
-  // args : key,max,min,[limit],[offset]
   redis_zrangebyscore_withscores |cx| {
     this!(cx this {
       this.zrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
         to_bin(cx, 1)?,
-        to_str(cx, 2)?,
-        to_str(cx, 3)?,
+        to_zrange(cx, 2)?,
+        to_zrange(cx, 3)?,
         true,
         limit_offset(cx,4)?
       )
     })
   }
 
+  // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore |cx| {
     this!(cx this {
       this.zrevrangebyscore::<Vec<Vec<u8>>,_,_,_>(
         to_bin(cx, 1)?,
-        to_str(cx, 2)?,
-        to_str(cx, 3)?,
+        to_zrange(cx, 2)?,
+        to_zrange(cx, 3)?,
         false,
         limit_offset(cx,4)?
       )
     })
   }
 
-  // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore_withscores |cx| {
     this!(cx this {
       this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
         to_bin(cx, 1)?,
-        to_str(cx, 2)?,
-        to_str(cx, 3)?,
+        to_zrange(cx, 2)?,
+        to_zrange(cx, 3)?,
         true,
         limit_offset(cx,4)?
       )
