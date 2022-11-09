@@ -18,8 +18,12 @@ pub fn to_zrange(cx: &'_ mut Cx, n: usize) -> Result<ZRange, Throw> {
   let val = cx.argument::<JsValue>(n)?;
   Ok(if val.is_a::<JsString, _>(cx) {
     val.downcast_or_throw::<JsString, _>(cx)?.value(cx).into()
-  } else if val.is_a::<JsNumber, _>(cx) {
-    val.downcast_or_throw::<JsNumber, _>(cx)?.value(cx).into()
+  } else {
+    val
+      .downcast_or_throw::<JsNumber, _>(cx)?
+      .value(cx)
+      .try_into()
+      .unwrap()
   })
 }
 
