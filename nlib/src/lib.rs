@@ -284,6 +284,21 @@ pub fn r#await<'a, T: Send + 'static, C: Context<'a>>(
   Ok(promise)
 }
 
+pub fn jswait<'a, T: 'static + Send + AsValue, C: Context<'a>>(
+  cx: &mut C,
+  f: impl std::future::Future<Output = anyhow::Result<T>> + Send + 'static,
+) -> JsResult<'a, JsValue> {
+  r#await(cx, f, |mut cx, r| Ok(r.as_value(&mut cx)))
+}
+
+#[macro_export]
+macro_rules! jswait {
+  ($cx:expr, $r:expr) => {{
+    let r = $r;
+    jswait($cx, async move { Ok(r.await?) })
+  }};
+}
+
 /*
 pub fn js_undefined<'a, C: Context<'a>>(cx: &mut C) -> JsResult<'a, JsValue> {
   Ok(cx.undefined().as_value(cx))
@@ -389,18 +404,3 @@ await_trait!(
   Option<T>
 );
 */
-
-pub fn jswait<'a, T: 'static + Send + AsValue, C: Context<'a>>(
-  cx: &mut C,
-  f: impl std::future::Future<Output = anyhow::Result<T>> + Send + 'static,
-) -> JsResult<'a, JsValue> {
-  r#await(cx, f, |mut cx, r| Ok(r.as_value(&mut cx)))
-}
-
-#[macro_export]
-macro_rules! jswait {
-  ($cx:expr, $r:expr) => {{
-    let r = $r;
-    jswait($cx, async move { Ok(r.await?) })
-  }};
-}
