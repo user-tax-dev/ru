@@ -27,7 +27,7 @@ redis = await Redis(
 console.log await redis.zrevrangebyscoreWithscores(
   Uint8Array.from [4,0,12]
   '+inf'
-  '-inf'
+  1
 )
 
 # key = 'test'

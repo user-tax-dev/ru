@@ -29,7 +29,6 @@ pub fn to_zrange(cx: &'_ mut Cx, n: usize) -> Result<ZRange, Throw> {
 
 fn limit_offset(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
   let len = cx.len();
-  dbg!(len, n);
   Ok(if len > n {
     let limit = as_f64(cx, n)? as i64;
     let n = n + 1;
