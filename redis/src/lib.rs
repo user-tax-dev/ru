@@ -276,6 +276,24 @@ js_fn! {
     })
   }
 
+  redis_zrevrangebyscore_withscores |cx| {
+    let limit = if cx.len() == 4 {
+      Some(as_f64(cx,4)?)
+    }else{
+      None
+    };
+
+    this!(cx this {
+      this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
+        to_bin(cx, 1)?,
+        to_str(cx, 2)?,
+        to_str(cx, 3)?,
+        true,
+        None
+      )
+    })
+  }
+
   redis_zadd |cx| {
     this!(cx this {
       this.zadd::<f64,_,_>(
