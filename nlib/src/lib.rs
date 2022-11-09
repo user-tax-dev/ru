@@ -1,4 +1,5 @@
 #![feature(macro_metavar_expr)]
+#![feature(min_specialization)]
 
 use std::borrow::Cow;
 
@@ -40,13 +41,27 @@ macro_rules! as_value_number {
 
 as_value_number!(f64, u64, i64, f32, u32, i32, u16, i16, u8, i8);
 
-impl AsValue for Vec<u64> {
-  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+impl<T: AsValue> AsValue for Vec<T> {
+  default fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
     let li = JsArray::new(cx, self.len() as u32);
     for (i, v) in self.into_iter().enumerate() {
       let v = v.as_value(cx);
       let _ = li.set(cx, i as u32, v);
     }
+
+    li.as_value(cx)
+  }
+}
+
+impl<A: AsValue, B: AsValue> AsValue for (A, B) {
+  fn as_value<'a, C: Context<'a>>(self, cx: &mut C) -> Handle<'a, JsValue> {
+    let li = JsArray::new(cx, 2);
+
+    let v0 = self.0.as_value(cx);
+    li.set(cx, 0, v0).unwrap();
+
+    let v1 = self.1.as_value(cx);
+    li.set(cx, 1, v1).unwrap();
 
     li.as_value(cx)
   }

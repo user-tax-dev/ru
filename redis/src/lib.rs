@@ -276,12 +276,20 @@ js_fn! {
     })
   }
 
+  // args : key,max,min,[limit],[offset]
   redis_zrevrangebyscore_withscores |cx| {
-    let limit = if cx.len() == 4 {
-      Some(as_f64(cx,4)?)
+    let offset_limit = if cx.len() >= 4 {
+      let limit = as_f64(cx,4)? as i64;
+      let offset = if cx.len() >= 5 {
+        as_f64(cx,5)? as i64
+      }else{
+        0
+      };
+      Some((offset,limit))
     }else{
       None
     };
+
 
     this!(cx this {
       this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
@@ -289,7 +297,7 @@ js_fn! {
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         true,
-        None
+        offset_limit
       )
     })
   }
