@@ -17,7 +17,7 @@ as_value_cls!(ServerConfig, Redis);
 macro_rules! this {
   ($cx:ident $this:ident $body:block) => {{
     let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
-    await_as_value!($cx, $body)?
+    jswait!($cx, $body)?
   }};
 }
 

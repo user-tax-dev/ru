@@ -100,7 +100,7 @@ js_fn! {
       hasher.update(&bin);
     }
     const N: usize = 512;
-    await_as_value(cx, async move {
+    jswait(cx, async move {
       let mut output = [0; N];
       for _ in 1..N {
         hasher.finalize_xof().fill(&mut output);

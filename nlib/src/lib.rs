@@ -390,7 +390,7 @@ await_trait!(
 );
 */
 
-pub fn await_as_value<'a, T: 'static + Send + AsValue, C: Context<'a>>(
+pub fn jswait<'a, T: 'static + Send + AsValue, C: Context<'a>>(
   cx: &mut C,
   f: impl std::future::Future<Output = anyhow::Result<T>> + Send + 'static,
 ) -> JsResult<'a, JsValue> {
@@ -398,9 +398,9 @@ pub fn await_as_value<'a, T: 'static + Send + AsValue, C: Context<'a>>(
 }
 
 #[macro_export]
-macro_rules! await_as_value {
+macro_rules! jswait {
   ($cx:expr, $r:expr) => {{
     let r = $r;
-    await_as_value($cx, async move { Ok(r.await?) })
+    jswait($cx, async move { Ok(r.await?) })
   }};
 }
