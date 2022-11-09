@@ -21,7 +21,7 @@ macro_rules! this {
   }};
 }
 
-macro_rules! fcall_ro{
+macro_rules! fcall_ro {
   ($cx:ident, $ty:ty)=>{{
     let name = to_str($cx, 1)?;
     let keys = to_bin_li($cx, 2)?;

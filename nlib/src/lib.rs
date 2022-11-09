@@ -284,6 +284,7 @@ pub fn r#await<'a, T: Send + 'static, C: Context<'a>>(
   Ok(promise)
 }
 
+/*
 pub fn js_undefined<'a, C: Context<'a>>(cx: &mut C) -> JsResult<'a, JsValue> {
   Ok(cx.undefined().as_value(cx))
 }
@@ -294,7 +295,6 @@ pub fn js_box<'a, C: Context<'a>, T: 'static + Send + Finalize>(
 ) -> JsResult<'a, JsValue> {
   Ok(cx.boxed(t).as_value(cx))
 }
-
 macro_rules! await_trait {
   ($to:ident, $t:ty, $r:ty) => {
     paste! {
@@ -388,6 +388,7 @@ await_trait!(
   Iterator<Item = impl AsValue> + ExactSizeIterator,
   Option<T>
 );
+*/
 
 pub fn await_as_value<'a, T: 'static + Send + AsValue, C: Context<'a>>(
   cx: &mut C,

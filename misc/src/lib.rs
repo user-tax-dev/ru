@@ -100,7 +100,7 @@ js_fn! {
       hasher.update(&bin);
     }
     const N: usize = 512;
-    await_bin(cx, async move {
+    await_as_value(cx, async move {
       let mut output = [0; N];
       for _ in 1..N {
         hasher.finalize_xof().fill(&mut output);
@@ -108,7 +108,7 @@ js_fn! {
       }
       let mut output = [0; 16];
       hasher.finalize_xof().fill(&mut output);
-      Ok(Box::from(&output[..]))
+      Ok(Box::<[u8]>::from(&output[..]))
     })?
   }
 
