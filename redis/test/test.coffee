@@ -24,10 +24,9 @@ redis = await Redis(
   REDIS_PASSWORD
 )
 
+
 console.log await redis.zrevrangebyscoreWithscores(
-  Uint8Array.from [4,0,12]
-  '+inf'
-  1
+  Uint8Array.from [ 4, 0, 16, 126 ]
 )
 
 # key = 'test'
