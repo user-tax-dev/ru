@@ -16,10 +16,10 @@ as_value_cls!(ServerConfig, Redis);
 
 fn offset_limit(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
   let len = cx.len();
-  Ok(if len >= n {
+  Ok(if len > n {
     let limit = as_f64(cx, n)? as i64;
     let n = n + 1;
-    let offset = if len >= n { as_f64(cx, n)? as i64 } else { 0 };
+    let offset = if len > n { as_f64(cx, n)? as i64 } else { 0 };
     Some((offset, limit))
   } else {
     None
