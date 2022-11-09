@@ -14,8 +14,8 @@ alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 as_value_cls!(ServerConfig, Redis);
 
-fn offset_limit<'a, C: Context<'a>>(cx: &'a mut C, n: usize) -> JsResult<'a, Option<(i64, i64)>> {
-  let offset_limit = if cx.len() >= n {
+fn offset_limit(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
+  Ok(if cx.len() >= n {
     let limit = as_f64(cx, n)? as i64;
     let n = n + 1;
     let offset = if cx.len() >= n {
@@ -26,7 +26,7 @@ fn offset_limit<'a, C: Context<'a>>(cx: &'a mut C, n: usize) -> JsResult<'a, Opt
     Some((offset, limit))
   } else {
     None
-  };
+  })
 }
 
 macro_rules! this {

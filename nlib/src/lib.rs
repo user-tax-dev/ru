@@ -3,8 +3,8 @@
 
 use std::borrow::Cow;
 
-pub use neon::prelude::*;
-use neon::{result::Throw, types::buffer::TypedArray};
+use neon::types::buffer::TypedArray;
+pub use neon::{prelude::*, result::Throw};
 use num_traits::AsPrimitive;
 use once_cell::sync::OnceCell;
 pub use paste::paste;
