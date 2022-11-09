@@ -14,7 +14,7 @@ alias!(ServerConfig, Config);
 alias!(Redis, RedisPool);
 as_value_cls!(ServerConfig, Redis);
 
-fn offset_limit(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
+fn limit_offset(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>, Throw> {
   let len = cx.len();
   Ok(if len > n {
     let limit = as_f64(cx, n)? as i64;
@@ -295,7 +295,7 @@ js_fn! {
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         false,
-        offset_limit(cx,4)?
+        limit_offset(cx,4)?
       )
     })
   }
@@ -308,7 +308,7 @@ js_fn! {
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         true,
-        offset_limit(cx,4)?
+        limit_offset(cx,4)?
       )
     })
   }
@@ -320,7 +320,7 @@ js_fn! {
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         false,
-        offset_limit(cx,4)?
+        limit_offset(cx,4)?
       )
     })
   }
@@ -333,7 +333,7 @@ js_fn! {
         to_str(cx, 2)?,
         to_str(cx, 3)?,
         true,
-        offset_limit(cx,4)?
+        limit_offset(cx,4)?
       )
     })
   }
