@@ -1,8 +1,10 @@
 mod init;
 use fred::{
-  interfaces::{FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface},
+  interfaces::{
+    FunctionInterface, HashesInterface, KeysInterface, SetsInterface, SortedSetsInterface,
+  },
   pool::RedisPool,
-  prelude::{ReconnectPolicy, RedisConfig, RedisValue, ServerConfig as Config},
+  prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
   types::{Expiration, RedisMap, SetOptions, ZRange, ZRangeBound, ZRangeKind},
 };
 pub use init::init;
@@ -18,7 +20,7 @@ fn min_max_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
     to_zrange(cx, 2)?
   } else {
     ZRange {
-      kind:  ZRangeKind::Inclusive,
+      kind: ZRangeKind::Inclusive,
       range: ZRangeBound::NegInfiniteScore,
     }
   };
@@ -26,7 +28,7 @@ fn min_max_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
     to_zrange(cx, 3)?
   } else {
     ZRange {
-      kind:  ZRangeKind::Inclusive,
+      kind: ZRangeKind::Inclusive,
       range: ZRangeBound::InfiniteScore,
     }
   };
@@ -40,7 +42,7 @@ fn max_min_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
     to_zrange(cx, 2)?
   } else {
     ZRange {
-      kind:  ZRangeKind::Inclusive,
+      kind: ZRangeKind::Inclusive,
       range: ZRangeBound::InfiniteScore,
     }
   };
@@ -48,7 +50,7 @@ fn max_min_score(cx: &'_ mut Cx) -> Result<(ZRange, ZRange), Throw> {
     to_zrange(cx, 3)?
   } else {
     ZRange {
-      kind:  ZRangeKind::Inclusive,
+      kind: ZRangeKind::Inclusive,
       range: ZRangeBound::NegInfiniteScore,
     }
   };
@@ -60,7 +62,11 @@ pub fn to_zrange(cx: &'_ mut Cx, n: usize) -> Result<ZRange, Throw> {
   Ok(if val.is_a::<JsString, _>(cx) {
     val.downcast_or_throw::<JsString, _>(cx)?.value(cx).into()
   } else {
-    val.downcast_or_throw::<JsNumber, _>(cx)?.value(cx).try_into().unwrap()
+    val
+      .downcast_or_throw::<JsNumber, _>(cx)?
+      .value(cx)
+      .try_into()
+      .unwrap()
   })
 }
 
