@@ -2,20 +2,20 @@ lockfileVersion: 5.4
 
 specifiers:
   '@iuser/camel': ^0.0.20
-  '@iuser/node-loader': ^0.0.45
+  '@iuser/node-loader': ^0.0.46
   '@iuser/read': ^0.0.5
   '@rmw/thisdir': ^0.0.2
-  '@u6x/jsext': ^0.0.26
+  '@u6x/jsext': ^0.0.27
   coffee_plus: ^0.0.43
   concurrently: ^7.5.0
   utax: ^0.0.26
 
 devDependencies:
   '@iuser/camel': 0.0.20
-  '@iuser/node-loader': 0.0.45
+  '@iuser/node-loader': 0.0.46
   '@iuser/read': 0.0.5
   '@rmw/thisdir': 0.0.2
-  '@u6x/jsext': 0.0.26
+  '@u6x/jsext': 0.0.27
   coffee_plus: 0.0.43
   concurrently: 7.5.0
   utax: 0.0.26
@@ -26,10 +26,10 @@ packages:
     resolution: {integrity: sha512-cEYRxe+NaHY/z2F4JbMd98J/+Oj6IlzHDCM1bG6vQLozKeuOLT4Hq5g6M7TOtVNP+VURBkXfFMoZIW7Iunamcg==}
     dev: true
 
-  /@iuser/node-loader/0.0.45:
-    resolution: {integrity: sha512-N+DI0Sc0IQQiSB9m5DSK2peaoezbEHWT5Taq1nsQD685h7Dx+09cu7O1EecNrS5sj3XLBPQTRIlnViGFARIhPg==}
+  /@iuser/node-loader/0.0.46:
+    resolution: {integrity: sha512-NunLDSSEswDyapzxljkt67xRbHklNtZHjgEoed9k6WbeZZ4/T3HBJIvdURuDo7uIVRBW6Q8yKM5z8NPOHIuErQ==}
     dependencies:
-      '@u6x/jsext': 0.0.26
+      '@u6x/jsext': 0.0.27
       coffee_plus: 0.0.43
       coffeescript: 2.7.0
     dev: true
@@ -50,8 +50,8 @@ packages:
     resolution: {integrity: sha512-KYV1t5GseFwwM0Q4mIHasm6csy9eVImOD9YLU5y8Ya3jb1hm4ahroSJSJZqFUsUAFC7CNnpvkzE703NQBCKIUg==}
     dev: true
 
-  /@u6x/jsext/0.0.26:
-    resolution: {integrity: sha512-tmhuBWybOknfrMC8YAynn6stLbXCJrw4VDQ+bPu+9x0ybFFdfpHNIePrsT6dG5WEQs6xpngot62FlW9waJNmmg==}
+  /@u6x/jsext/0.0.27:
+    resolution: {integrity: sha512-JWYU9TgVNp6Te8kP40LezAL6/kOVHsUtwaWj036hw1mLa5T80F8Ntrnnc8yG+2gEAq2VoY2lBLsj/7vMFJgXLw==}
     dev: true
 
   /ansi-regex/5.0.1:
