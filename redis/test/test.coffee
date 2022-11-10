@@ -23,12 +23,18 @@ redis = await Redis(
   REDIS_USER
   REDIS_PASSWORD
 )
-key = new Uint8Array [ 4, 0, 16, 131 ]
 
-console.log await redis.testz key
-console.log await redis.zrevrangebyscore key
-console.log await redis.zrevrangebyscoreWithscores key
-console.log 'done'
+key = "testz"
+
+await redis.hset key,"a","b"
+await redis.hset key,"c","d"
+console.log await redis.hmget key,"a","b","c"
+await redis.del key
+
+#console.log await redis.testz key
+#console.log await redis.zrevrangebyscore key
+#console.log await redis.zrevrangebyscoreWithscores key
+#console.log 'done'
 
 # key = 'test'
 #key = Buffer.from [1,2,3]

@@ -235,6 +235,33 @@ js_fn! {
     })
   }
 
+  redis_hmget |cx| {
+    this!(cx this {
+      this.hmget::<Vec<Option<String>>,_,_>(
+        to_bin(cx, 1)?,
+        args_bin_li(cx,2)?
+      )
+    })
+  }
+
+  redis_hmget_b |cx| {
+    this!(cx this {
+      this.hmget::<Vec<Option<Vec<u8>>>,_,_>(
+        to_bin(cx, 1)?,
+        args_bin_li(cx,2)?
+      )
+    })
+  }
+
+  redis_hmget_n |cx| {
+    this!(cx this {
+      this.hmget::<Vec<Option<f64>>,_,_>(
+        to_bin(cx, 1)?,
+        args_bin_li(cx,2)?
+      )
+    })
+  }
+
   redis_hget |cx| {
     this!(cx this {
       this.hget::<Option<String>,_,_>(
