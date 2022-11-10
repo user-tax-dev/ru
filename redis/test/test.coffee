@@ -25,6 +25,7 @@ redis = await Redis(
 )
 key = new Uint8Array [ 4, 0, 16, 131 ]
 
+console.log await redis.testz key
 console.log await redis.zrevrangebyscore key
 console.log await redis.zrevrangebyscoreWithscores key
 console.log 'done'

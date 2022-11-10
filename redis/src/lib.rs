@@ -447,31 +447,29 @@ js_fn! {
   redis_fstr |cx| { fcall!(cx,Option<String>) }
   redis_fstr_r |cx| { fcall_ro!(cx,Option<String>) }
 
-  /*
-   redis_testz |
-   cx| {
-    let this = cx.argument::<JsBox<Redis>>(0)?;
-    let (max,min) = max_min_score(cx)?;
-    let key = to_bin(cx, 1)?;
-    let lo = limit_offset(cx,4)?;
-    let this = &this.0;
-    let r = this.zrevrangebyscore::<Vec<(RedisValue,RedisValue)>,_,_,_>(
-      key,
-      max,
-      min,
-      true,
-      lo
-    );
-    let r = async move {
-      let r = r.await?;
-      dbg!(&r);
-      Ok::<_,anyhow::Error>(r)
-    };
+  // redis_testz |cx| {
+  //  use fred::prelude::RedisValue;
+  //  let this = cx.argument::<JsBox<Redis>>(0)?;
+  //  let (max,min) = max_min_score(cx)?;
+  //  let key = to_bin(cx, 1)?;
+  //  let lo = limit_offset(cx,4)?;
+  //  let this = &this.0;
+  //  let r = this.zrevrangebyscore::<Vec<(RedisValue,RedisValue)>,_,_,_>(
+  //    key,
+  //    max,
+  //    min,
+  //    true,
+  //    lo
+  //  );
+  //  let r = async move {
+  //    let r = r.await?;
+  //    dbg!(&r);
+  //    Ok::<_,anyhow::Error>(r)
+  //  };
 
-    jswait(cx, async move {
-      let r = r.await?;
-      Ok(())
-    })?
-  }
-  */
+  //  jswait(cx, async move {
+  //    let r = r.await?;
+  //    Ok(())
+  //  })?
+  // }
 }
