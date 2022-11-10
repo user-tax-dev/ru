@@ -6,6 +6,7 @@ specifiers:
   '@iuser/read': ^0.0.5
   '@rmw/thisdir': ^0.0.2
   '@u6x/jsext': ^0.0.27
+  cargo-cp-artifact: ^0.1.6
   coffee_plus: ^0.0.43
   concurrently: ^7.5.0
   utax: ^0.0.26
@@ -16,6 +17,7 @@ devDependencies:
   '@iuser/read': 0.0.5
   '@rmw/thisdir': 0.0.2
   '@u6x/jsext': 0.0.27
+  cargo-cp-artifact: 0.1.6
   coffee_plus: 0.0.43
   concurrently: 7.5.0
   utax: 0.0.26
@@ -64,6 +66,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       color-convert: 2.0.1
+    dev: true
+
+  /cargo-cp-artifact/0.1.6:
+    resolution: {integrity: sha512-CQw0doK/aaF7j041666XzuilHxqMxaKkn+I5vmBsd8SAwS0cO5CqVEVp0xJwOKstyqWZ6WK4Ww3O6p26x/Goyg==}
+    hasBin: true
     dev: true
 
   /chalk/4.1.2:

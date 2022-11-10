@@ -6,6 +6,7 @@
     "@iuser/read": "^0.0.5",
     "@rmw/thisdir": "^0.0.2",
     "@u6x/jsext": "^0.0.27",
+    "cargo-cp-artifact": "^0.1.6",
     "coffee_plus": "^0.0.43",
     "concurrently": "^7.5.0",
     "utax": "^0.0.26"
