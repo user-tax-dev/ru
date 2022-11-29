@@ -422,6 +422,15 @@ js_fn! {
     })
   }
 
+  redis_zrem |cx| {
+    this!(cx this {
+      this.zrem::<f64,_,_>(
+        to_bin(cx, 1)?,
+        to_bin_li(cx, 2)?
+      )
+    })
+  }
+
   redis_zadd |cx| {
     this!(cx this {
       this.zadd::<f64,_,_>(
