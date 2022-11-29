@@ -12,7 +12,7 @@ anyhow = "1.0.66"
 num-traits = "0.2.15"
 
 [dependencies.tokio]
-version = "1.21.2"
+version = "1.22.0"
 features = ["rt","rt-multi-thread"]
 
 [dependencies.neon]

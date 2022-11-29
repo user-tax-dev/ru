@@ -14,7 +14,7 @@ webp = "0.2.2"
 tiny-skia = "0.6"
 resvg = "0.23.0"
 usvg = { version = "0.23.0", default-features = false }
-image = "0.24.4"
+image = "0.24.5"
 anyhow = "1.0.66"
 thiserror = "1.0.37"
 
