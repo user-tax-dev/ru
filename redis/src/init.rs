@@ -30,6 +30,7 @@ pub fn init(cx: &mut ModuleContext) -> NeonResult<()> {
   cx.export_function("redisZrangebyscoreWithscores", crate::redis_zrangebyscore_withscores)?;
   cx.export_function("redisZrevrangebyscore", crate::redis_zrevrangebyscore)?;
   cx.export_function("redisZrevrangebyscoreWithscores", crate::redis_zrevrangebyscore_withscores)?;
+  cx.export_function("redisZrem", crate::redis_zrem)?;
   cx.export_function("redisZadd", crate::redis_zadd)?;
   cx.export_function("redisZaddXx", crate::redis_zadd_xx)?;
   cx.export_function("redisFnload", crate::redis_fnload)?;
