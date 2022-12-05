@@ -333,7 +333,7 @@ js_fn! {
 
   redis_smembers |cx| {
     this!(cx this {
-      this.smembers::<Vec<u8>,_>(
+      this.smembers::<Vec<Vec<u8>>,_>(
         to_bin(cx, 1)?,
       )
     })
