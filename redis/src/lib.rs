@@ -331,6 +331,14 @@ js_fn! {
     })
   }
 
+  redis_smembers |cx| {
+    this!(cx this {
+      this.smembers::<Vec<u8>,_,_>(
+        to_bin(cx, 1)?,
+      )
+    })
+  }
+
   redis_sadd |cx| {
     this!(cx this {
       this.sadd::<f64,_,_>(
