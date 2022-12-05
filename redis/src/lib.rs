@@ -235,7 +235,7 @@ js_fn! {
     })
   }
 
-  redis_hmget |cx| {
+  redis_hmget_s |cx| {
     this!(cx this {
       this.hmget::<Vec<Option<String>>,_,_>(
         to_bin(cx, 1)?,
@@ -244,7 +244,7 @@ js_fn! {
     })
   }
 
-  redis_hmget_b |cx| {
+  redis_hmget |cx| {
     this!(cx this {
       this.hmget::<Vec<Option<Vec<u8>>>,_,_>(
         to_bin(cx, 1)?,
