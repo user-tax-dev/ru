@@ -5,7 +5,7 @@ use fred::{
   },
   pool::RedisPool,
   prelude::{ReconnectPolicy, RedisConfig, ServerConfig as Config},
-  types::{Expiration, RedisMap, SetOptions, ZRange, ZRangeBound, ZRangeKind},
+  types::{Expiration, RedisMap, Server, SetOptions, ZRange, ZRangeBound, ZRangeKind},
 };
 pub use init::init;
 use nlib::*;
@@ -134,16 +134,22 @@ js_fn! {
   server_host_port |cx| {
     let host = to_str(cx, 0)?;
     let port = as_f64(cx, 1)? as u16;
-    ServerConfig(Config::Centralized { host, port })
+    ServerConfig(Config::Centralized {
+      server:Server {
+        host:host.into(), port, tls_server_name:None
+      }
+    })
   }
 
   server_cluster |cx| {
     ServerConfig(Config::Clustered {
       hosts:to_kvli(
-              cx,
-              0,
-              jsval2num::<u16>
-            )?
+        cx,
+        0,
+        jsval2num::<u16>
+      )?.iter().map(
+        |(host,port)| Server {host:host.into(), port:*port, tls_server_name:None}
+      ).collect()
     })
   }
 
@@ -163,8 +169,8 @@ js_fn! {
       cx,
       async move {
         //let client = RedisClient::new(conf);
-        let client = RedisPool::new(conf, 3)?;
-        client.connect(Some(policy));
+        let client = RedisPool::new(conf, None, Some(policy), 3)?;
+        client.connect();
         client.wait_for_connect().await?;
         Ok(client)
       },
@@ -174,7 +180,9 @@ js_fn! {
 
   redis_quit |cx| {
     this!(cx this {
-      this.quit_pool()
+      async move {
+        Ok::<_,anyhow::Error>(this.quit_pool().await)
+      }
     })
   }
 
