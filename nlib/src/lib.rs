@@ -309,8 +309,18 @@ pub fn jswait<'a, T: 'static + Send + AsValue, C: Context<'a>>(
 #[macro_export]
 macro_rules! jswait {
   ($cx:expr, $r:expr) => {{
-    let r = $r;
-    jswait($cx, async move { Ok(r.await?) })
+    let cx = $cx;
+    let (deferred, promise) = cx.promise();
+    let promise = promise.as_value(cx);
+    let channel = cx.channel();
+    runtime(cx)?.spawn(async move {
+      let r = $r.await;
+      deferred.try_settle_with(&channel, move |mut cx| match r {
+        Err(err) => cx.throw_error(err.to_string()),
+        Ok(r) => Ok(r.as_value(&mut cx)),
+      })
+    });
+    Ok(promise)
   }};
 }
 
