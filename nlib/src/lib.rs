@@ -4,7 +4,13 @@
 use std::borrow::Cow;
 
 use neon::types::buffer::TypedArray;
-pub use neon::{prelude::*, result::Throw};
+pub use neon::{
+  prelude::{
+    Context, Finalize, FunctionContext, Handle, JsArray, JsBox, JsNumber, JsObject, JsResult,
+    JsString, JsUint8Array, JsUndefined, JsValue, NeonResult, Object, TaskContext, Value,
+  },
+  result::Throw,
+};
 use num_traits::AsPrimitive;
 use once_cell::sync::OnceCell;
 pub use paste::paste;
