@@ -8,6 +8,7 @@ use fred::{
   types::{Expiration, RedisMap, Server, SetOptions, ZRange, ZRangeBound, ZRangeKind},
 };
 pub use init::init;
+use neon::result::Throw;
 use nlib::*;
 
 alias!(ServerConfig, Config);

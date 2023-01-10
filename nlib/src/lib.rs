@@ -3,14 +3,11 @@
 
 use std::borrow::Cow;
 
-use neon::types::buffer::TypedArray;
-pub use neon::{
-  prelude::{
-    Context, Finalize, FunctionContext, Handle, JsArray, JsBox, JsNumber, JsObject, JsResult,
-    JsString, JsUint8Array, JsUndefined, JsValue, NeonResult, Object, TaskContext, Value,
-  },
-  result::Throw,
+pub use neon::prelude::{
+  Context, Finalize, FunctionContext, Handle, JsArray, JsBox, JsNumber, JsObject, JsResult,
+  JsString, JsUint8Array, JsUndefined, JsValue, NeonResult, Object, TaskContext, Value,
 };
+use neon::types::buffer::TypedArray;
 use num_traits::AsPrimitive;
 use once_cell::sync::OnceCell;
 pub use paste::paste;
@@ -174,23 +171,23 @@ macro_rules! alias {
 
 pub type Cx<'a> = FunctionContext<'a>;
 
-pub fn as_str(cx: &'_ mut Cx, n: usize) -> Result<String, Throw> {
+pub fn as_str(cx: &'_ mut Cx, n: usize) -> Result<String, neon::result::Throw> {
   Ok(cx.argument::<JsString>(n)?.value(cx))
 }
 
-pub fn as_f64(cx: &'_ mut Cx, n: usize) -> Result<f64, Throw> {
+pub fn as_f64(cx: &'_ mut Cx, n: usize) -> Result<f64, neon::result::Throw> {
   Ok(cx.argument::<JsNumber>(n)?.value(cx))
 }
 
-pub fn as_bin<'a, 'b>(cx: &'a mut Cx<'b>, n: usize) -> Result<&'a [u8], Throw> {
+pub fn as_bin<'a, 'b>(cx: &'a mut Cx<'b>, n: usize) -> Result<&'a [u8], neon::result::Throw> {
   Ok(cx.argument::<JsUint8Array>(n)?.as_slice(cx))
 }
 
 pub fn to_kvli<V>(
   cx: &'_ mut Cx,
   n: usize,
-  to_val: impl FnOnce(&'_ mut Cx, Handle<'_, JsValue>) -> Result<V, Throw> + Copy,
-) -> Result<Vec<(String, V)>, Throw> {
+  to_val: impl FnOnce(&'_ mut Cx, Handle<'_, JsValue>) -> Result<V, neon::result::Throw> + Copy,
+) -> Result<Vec<(String, V)>, neon::result::Throw> {
   let mut kv = vec![];
   let ob = cx.argument::<JsObject>(n)?;
   for i in ob.get_own_property_names(cx)?.to_vec(cx)? {
@@ -202,15 +199,15 @@ pub fn to_kvli<V>(
   Ok(kv)
 }
 
-pub fn to_bin_li(cx: &'_ mut Cx, n: usize) -> Result<Vec<Box<[u8]>>, Throw> {
+pub fn to_bin_li(cx: &'_ mut Cx, n: usize) -> Result<Vec<Box<[u8]>>, neon::result::Throw> {
   to_li(cx, n, jsval2bin)
 }
 
 pub fn to_li<V>(
   cx: &'_ mut Cx,
   n: usize,
-  to_val: impl FnOnce(&'_ mut Cx, Handle<'_, JsValue>) -> Result<V, Throw> + Copy,
-) -> Result<Vec<V>, Throw> {
+  to_val: impl FnOnce(&'_ mut Cx, Handle<'_, JsValue>) -> Result<V, neon::result::Throw> + Copy,
+) -> Result<Vec<V>, neon::result::Throw> {
   let val = cx.argument::<JsValue>(n)?;
   Ok(if val.is_a::<JsUndefined, _>(cx) {
     vec![]
@@ -225,14 +222,17 @@ pub fn to_li<V>(
   })
 }
 
-pub fn jsval2num<V: Copy + 'static>(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<V, Throw>
+pub fn jsval2num<V: Copy + 'static>(
+  cx: &'_ mut Cx,
+  val: Handle<'_, JsValue>,
+) -> Result<V, neon::result::Throw>
 where
   f64: AsPrimitive<V>,
 {
   Ok(val.downcast_or_throw::<JsNumber, _>(cx)?.value(cx).as_())
 }
 
-pub fn jsval2str(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<String, Throw> {
+pub fn jsval2str(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<String, neon::result::Throw> {
   Ok(if val.is_a::<JsString, _>(cx) {
     val.downcast_or_throw::<JsString, _>(cx)?.value(cx)
   } else if val.is_a::<JsNumber, _>(cx) {
@@ -246,12 +246,15 @@ pub fn jsval2str(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<String, Thr
   })
 }
 
-pub fn to_str(cx: &'_ mut Cx, n: usize) -> Result<String, Throw> {
+pub fn to_str(cx: &'_ mut Cx, n: usize) -> Result<String, neon::result::Throw> {
   let val = cx.argument::<JsValue>(n)?;
   jsval2str(cx, val)
 }
 
-pub fn jsval2bin(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<Box<[u8]>, Throw> {
+pub fn jsval2bin(
+  cx: &'_ mut Cx,
+  val: Handle<'_, JsValue>,
+) -> Result<Box<[u8]>, neon::result::Throw> {
   Ok(if val.is_a::<JsString, _>(cx) {
     Box::from(val.downcast_or_throw::<JsString, _>(cx)?.value(cx).as_ref())
   } else if val.is_a::<JsNumber, _>(cx) {
@@ -268,12 +271,12 @@ pub fn jsval2bin(cx: &'_ mut Cx, val: Handle<'_, JsValue>) -> Result<Box<[u8]>, 
   })
 }
 
-pub fn to_bin(cx: &'_ mut Cx, n: usize) -> Result<Box<[u8]>, Throw> {
+pub fn to_bin(cx: &'_ mut Cx, n: usize) -> Result<Box<[u8]>, neon::result::Throw> {
   let val = cx.argument::<JsValue>(n)?;
   jsval2bin(cx, val)
 }
 
-pub fn args_bin_li(cx: &'_ mut Cx, offset: usize) -> Result<Vec<Box<[u8]>>, Throw> {
+pub fn args_bin_li(cx: &'_ mut Cx, offset: usize) -> Result<Vec<Box<[u8]>>, neon::result::Throw> {
   let mut li = vec![];
   for i in offset..cx.len() {
     li.push(to_bin(cx, i)?);
@@ -320,7 +323,7 @@ macro_rules! jswait {
     let promise = promise.as_value(cx);
     let channel = cx.channel();
     runtime(cx)?.spawn(async move {
-      let r = $r.await;
+      let r: anyhow::Result<_, _> = $r.await.into();
       deferred.try_settle_with(&channel, move |mut cx| match r {
         Err(err) => cx.throw_error(err.to_string()),
         Ok(r) => Ok(r.as_value(&mut cx)),
