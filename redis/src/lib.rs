@@ -84,7 +84,7 @@ fn limit_offset(cx: &mut FunctionContext, n: usize) -> Result<Option<(i64, i64)>
 
 macro_rules! this {
   ($cx:ident $this:ident $body:block) => {{
-    let $this = &$cx.argument::<JsBox<Redis>>(0)?.0;
+    let $this = $cx.argument::<JsBox<Redis>>(0)?.0.clone();
     jswait!($cx, $body)?
   }};
 }
