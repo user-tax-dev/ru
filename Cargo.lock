@@ -869,7 +869,7 @@ dependencies = [
 
 [[package]]
 name = "neon"
-version = "1.0.0-alpha.1"
+version = "1.0.0-alpha.2"
 dependencies = [
  "getrandom",
  "libloading",
@@ -882,7 +882,7 @@ dependencies = [
 
 [[package]]
 name = "neon-macros"
-version = "1.0.0-alpha.1"
+version = "1.0.0-alpha.2"
 dependencies = [
  "quote",
  "syn",
