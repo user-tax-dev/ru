@@ -232,232 +232,256 @@ js_fn! {
   }
 
   redis_del |cx| {
+    let a1 = args_bin_li(cx,1)?;
     this!(cx this {
-      this.del::<u32,_>(args_bin_li(cx,1)?)
+      this.del::<u32,_>(a1)
     })
   }
 
   redis_exist |cx| {
+    let a1 = args_bin_li(cx,1)?;
     this!(cx this {
-      this.exists::<u32,_>(args_bin_li(cx,1)?)
+      this.exists::<u32,_>(a1)
     })
   }
 
   redis_hmget_s |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=args_bin_li(cx,2)?;
     this!(cx this {
-      this.hmget::<Vec<Option<String>>,_,_>(
-        to_bin(cx, 1)?,
-        args_bin_li(cx,2)?
-      )
+      this.hmget::<Vec<Option<String>>,_,_>(a1,a2)
     })
   }
 
   redis_hmget |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=args_bin_li(cx,2)?;
     this!(cx this {
-      this.hmget::<Vec<Option<Vec<u8>>>,_,_>(
-        to_bin(cx, 1)?,
-        args_bin_li(cx,2)?
-      )
+      this.hmget::<Vec<Option<Vec<u8>>>,_,_>(a1,a2)
     })
   }
 
   redis_hmget_n |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=args_bin_li(cx,2)?;
     this!(cx this {
-      this.hmget::<Vec<Option<f64>>,_,_>(
-        to_bin(cx, 1)?,
-        args_bin_li(cx,2)?
-      )
+      this.hmget::<Vec<Option<f64>>,_,_>(a1,a2)
     })
   }
 
   redis_hget |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
-      this.hget::<Option<String>,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
-      )
+      this.hget::<Option<String>,_,_>(a1,a2)
     })
   }
 
   redis_hget_b |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
       this.hget::<Option<Vec<u8>>,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
+        a1,
+        a2,
       )
     })
   }
 
   redis_hget_n |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
       this.hget::<Option<f64>,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
+        a1,
+        a2,
       )
     })
   }
 
   redis_hset |cx| {
+    let a1=to_bin(cx, 1)?;
+    let val: RedisMap;
+    if cx.len() == 3 {
+      val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
+    } else {
+      val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
+    }
     this!(cx this {
-      let val: RedisMap;
-      if cx.len() == 3 {
-        val = ok!(cx,to_kvli(cx, 2, jsval2bin)?.try_into());
-      } else {
-        val = ok!(cx,(to_bin(cx, 2)?, to_bin(cx, 3)?).try_into());
-      }
-      this.hset::<(),_,_>(to_bin(cx, 1)?, val)
-
+      this.hset::<(),_,_>(a1, val)
     })
   }
 
   redis_hincrby |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
+    let a3=as_f64(cx, 3)?;
     this!(cx this {
       this.hincrby::<f64,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
-        as_f64(cx, 3)? as _,
+        a1,
+        a2,
+        a3 as _,
       )
     })
   }
 
   redis_hincr |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
       this.hincrby::<f64,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
+        a1,
+        a2,
         1
       )
     })
   }
 
   redis_hexist |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
       this.hexists::<bool,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
+        a1,
+        a2,
       )
     })
   }
 
   redis_smembers |cx| {
+    let a1 = to_bin(cx, 1)?;
     this!(cx this {
-      this.smembers::<Vec<Vec<u8>>,_>(
-        to_bin(cx, 1)?,
-      )
+      this.smembers::<Vec<Vec<u8>>,_>(a1)
     })
   }
 
   redis_sadd |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a2=args_bin_li(cx, 2)?;
     this!(cx this {
-      this.sadd::<f64,_,_>(
-        to_bin(cx, 1)?,
-        args_bin_li(cx, 2)?,
-      )
+      this.sadd::<f64,_,_>(a1,a2)
     })
   }
 
   redis_zscore |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
+
     this!(cx this {
-      this.zscore::<Option<f64>,_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
-      )
+      this.zscore::<Option<f64>,_,_>(a1,a2)
     })
   }
 
   redis_zincrby |cx| {
+    let a1=to_bin(cx, 1)?;
+    let a3=as_f64(cx, 3)?;
+    let a2=to_bin(cx, 2)?;
     this!(cx this {
       this.zincrby::<f64,_,_>(
-        to_bin(cx, 1)?,
-        as_f64(cx, 3)?,
-        to_bin(cx, 2)?,
+        a1,a3,a2
       )
     })
   }
 
   redis_zincr |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
     this!(cx this {
       this.zincrby::<f64,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         1.0,
-        to_bin(cx, 2)?,
+        a2,
       )
     })
   }
 
   // args : key,min,max,[limit],[offset]
   redis_zrangebyscore |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = limit_offset(cx,4)?;
+    let (min,max) = min_max_score(cx)?;
     this!(cx this {
-      let (min,max) = min_max_score(cx)?;
       this.zrangebyscore::<Vec<Vec<u8>>,_,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         min,
         max,
         false,
-        limit_offset(cx,4)?
+        a2
       )
     })
   }
 
   redis_zrangebyscore_withscores |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = limit_offset(cx,4)?;
+    let (min,max) = min_max_score(cx)?;
     this!(cx this {
-      let (min,max) = min_max_score(cx)?;
       this.zrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         min,
         max,
         true,
-        limit_offset(cx,4)?
+        a2
       )
     })
   }
 
   redis_zrevrangebyscore |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = limit_offset(cx,4)?;
+    let (max,min) = max_min_score(cx)?;
     this!(cx this {
-      let (max,min) = max_min_score(cx)?;
       this.zrevrangebyscore::<Vec<Vec<u8>>,_,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         max,
         min,
         false,
-        limit_offset(cx,4)?
+        a2
       )
     })
   }
 
   redis_zrevrangebyscore_withscores |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = limit_offset(cx,4)?;
+    let (max,min) = max_min_score(cx)?;
     this!(cx this {
-      let (max,min) = max_min_score(cx)?;
       this.zrevrangebyscore::<Vec<(Vec<u8>,f64)>,_,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         max,
         min,
         true,
-        limit_offset(cx,4)?
+        a2
       )
     })
   }
 
   redis_zrem |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = args_bin_li(cx, 2)?;
+
     this!(cx this {
       this.zrem::<f64,_,_>(
-        to_bin(cx, 1)?,
-        args_bin_li(cx, 2)?
+        a1,
+        a2
       )
     })
   }
 
   redis_zadd |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
+    let a3 = as_f64(cx, 3)?;
     this!(cx this {
       this.zadd::<f64,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         None,
         None,
         false,
         false,
         (
-          as_f64(cx, 3)?,
-          to_bin(cx, 2)?,
+          a3,
+          a2,
         )
       )
     })
