@@ -8,7 +8,6 @@ use fred::{
   types::{Expiration, RedisMap, Server, SetOptions, ZRange, ZRangeBound, ZRangeKind},
 };
 pub use init::init;
-use neon::result::Throw;
 use nlib::*;
 
 alias!(ServerConfig, Config);
@@ -465,26 +464,31 @@ js_fn! {
   }
 
   redis_zadd_xx |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
+    let a3 = as_f64(cx, 3)?;
+
     this!(cx this {
       this.zadd::<f64,_,_>(
-        to_bin(cx, 1)?,
+        a1,
         Some(SetOptions::XX),
         None,
         false,
         false,
         (
-          as_f64(cx, 3)?,
-          to_bin(cx, 2)?,
+          a3,
+          a2,
         )
       )
     })
   }
 
   redis_fnload |cx| {
+    let a1 = to_str(cx, 1)?;
     this!(cx this {
       this.function_load::<String,_>(
         true,
-        to_str(cx, 1)?,
+        a1
       )
     })
   }
