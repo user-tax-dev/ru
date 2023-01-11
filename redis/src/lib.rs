@@ -187,22 +187,26 @@ js_fn! {
   }
 
   redis_get |cx| {
+    let a1=to_bin(cx, 1)?;
     this!(cx this {
-      this.get::<Option<String>, _>(to_bin(cx, 1)?)
+      this.get::<Option<String>, _>(a1)
     })
   }
 
   redis_get_b |cx| {
+    let a1=to_bin(cx, 1)?;
     this!(cx this {
-      this.get::<Option<Vec<u8>>, _>(to_bin(cx, 1)?)
+      this.get::<Option<Vec<u8>>, _>(a1)
     })
   }
 
   redis_set |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
     this!(cx this {
       this.set::<(),_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
+        a1,
+        a2,
         None,
         None,
         false
@@ -211,11 +215,13 @@ js_fn! {
   }
 
   redis_setex |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2 = to_bin(cx, 2)?;
+    let a3 = as_f64(cx, 3)?;
     this!(cx this  {
       this.set::<(),_,_>(
-        to_bin(cx, 1)?,
-        to_bin(cx, 2)?,
-        Some(Expiration::EX(as_f64(cx, 3)? as _)),
+        a1,a2,
+        Some(Expiration::EX(a3 as _)),
         None,
         false
       )
@@ -223,10 +229,12 @@ js_fn! {
   }
 
   redis_expire |cx| {
+    let a1 = to_bin(cx, 1)?;
+    let a2=as_f64(cx, 2)?;
     this!(cx this {
       this.expire::<bool,_>(
-        to_bin(cx, 1)?,
-        as_f64(cx, 2)? as _
+        a1,
+        a2 as _
       )
     })
   }
